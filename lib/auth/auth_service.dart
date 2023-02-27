@@ -1,18 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService extends ChangeNotifier {
-  static final AuthService _instance = AuthService.internal();
-  factory AuthService() => _instance;
-  AuthService.internal();
-
+class AuthService {
   User? _currtentUser;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  User? user;
   bool isLoading = true;
 
   Future<void> signInwithGoogle() async {
@@ -28,7 +22,7 @@ class AuthService extends ChangeNotifier {
         );
 
         final UserCredential authResult = await _auth.signInWithCredential(credential);
-        _currtentUser = authResult.user;
+        _currtentUser = authResult.user!;
       }
     } on FirebaseAuthException {
       rethrow;
@@ -44,7 +38,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  getCurrentUser() {
+  User? get currentUser {
     return _currtentUser;
   }
 }
