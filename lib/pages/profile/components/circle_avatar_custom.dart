@@ -25,9 +25,25 @@ class _CircleAvatarCustomState extends State<CircleAvatarCustom> {
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).primaryColor,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).primaryColor,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                  ),
                   child: const Icon(
                     Icons.camera_alt,
                     color: Colors.white,
@@ -65,7 +81,7 @@ class _CircleAvatarCustomState extends State<CircleAvatarCustom> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(60),
-          color: Colors.amber,
+          color: Theme.of(context).primaryColor,
         ),
         child: Text(
           userStore.nameInitials,
