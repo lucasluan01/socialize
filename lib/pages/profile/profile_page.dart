@@ -73,7 +73,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     }),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () => userStore.pressedSave(),
+                      onPressed: () async {
+                        await userStore.pressedSave();
+                        userStore.isFormValid
+                            // ignore: use_build_context_synchronously
+                            ? Navigator.pushReplacementNamed(context, '/home')
+                            : null;
+                      },
                       child: const Text('Salvar'),
                     ),
                     const SizedBox(height: 16),

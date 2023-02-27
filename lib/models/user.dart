@@ -5,11 +5,11 @@ class User {
     required this.state,
     required this.email,
     required this.gender,
-    required this.photoUrl,
+    this.photoUrl,
   });
   late final String id;
   late final String name;
-  late final String photoUrl;
+  late final String? photoUrl;
   late final String state;
   late final String email;
   late final String gender;

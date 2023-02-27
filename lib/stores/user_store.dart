@@ -10,6 +10,7 @@ import 'package:socialize/repositories/user_repository.dart';
 
 part 'user_store.g.dart';
 
+// ignore: library_private_types_in_public_api
 class UserStore = _UserStoreBase with _$UserStore;
 
 abstract class _UserStoreBase with Store {
@@ -115,23 +116,18 @@ abstract class _UserStoreBase with Store {
     }
   }
 
-  // Future<void> createUser() async {
-  //   await UserRepository().createUser();
-  //   getCurrentUser();
-  // }
-
-  Future<void> updateUser() async {
+  Future<void> setUserData() async {
     final user = User(
       id: authService.currentUser!.uid,
       name: name!,
       state: state!,
       email: email!,
       gender: gender!,
-      photoUrl: photoUrl!,
+      photoUrl: photoUrl,
     );
 
     try {
-      await UserRepository().updateUser(user.toJson());
+      await UserRepository().setUser(user.toJson());
     } catch (e) {
       inspect(e);
     }
@@ -152,9 +148,8 @@ abstract class _UserStoreBase with Store {
   Future<void> pressedSave() async {
     showErrors = true;
     if (isFormValid) {
-      log("form is valid");
       await updatePhoto();
-      await updateUser();
+      await setUserData();
     }
   }
 

@@ -19,25 +19,12 @@ class UserRepository {
     return user.data();
   }
 
-  // Future<void> createUser() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(authService.currentUser!.uid)
-  //       .set({
-  //     'name': authService.currentUser!.displayName,
-  //     'email': authService.currentUser!.email,
-  //     'photoUrl': authService.currentUser!.photoURL,
-  //     'createdAt': DateTime.now(),
-  //     'updatedAt': DateTime.now(),
-  //   });
-  // }
-
-  Future<void> updateUser(Map<String, dynamic> data) async {
+  Future<void> setUser(Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(authService.currentUser!.uid)
-          .update(data);
+          .set(data);
     } catch (e) {
       rethrow;
     }
@@ -45,7 +32,8 @@ class UserRepository {
 
   Future<String?> uploadAvatar(File photoFile) async {
     final storageRef = FirebaseStorage.instance.ref();
-    final mountainsRef = storageRef.child("${authService.currentUser!.uid}.jpg");
+    final mountainsRef =
+        storageRef.child("${authService.currentUser!.uid}.jpg");
 
     try {
       await mountainsRef.putFile(photoFile);
