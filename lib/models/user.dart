@@ -1,5 +1,5 @@
-class User {
-  User({
+class UserModel {
+  UserModel({
     required this.id,
     required this.name,
     required this.state,
@@ -14,7 +14,7 @@ class User {
   late final String email;
   late final String gender;
 
-  User.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     photoUrl = json['photoUrl'];

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socialize/components/appbar_custom.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,14 +9,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarCustom(),
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: const [
+        // ContactCustom(),
+        // ContactCustom(),
+        // ContactCustom(),
+        // ContactCustom(),
+        // ContactCustom(),
+      ],
     );
   }
 }

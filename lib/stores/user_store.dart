@@ -21,7 +21,7 @@ abstract class _UserStoreBase with Store {
   }
 
   @observable
-  User? user;
+  UserModel? user;
 
   @observable
   bool showErrors = false;
@@ -46,6 +46,16 @@ abstract class _UserStoreBase with Store {
 
   @action
   void setGender(String? value) => gender = value;
+
+  @action
+  void setUser(UserModel? value) {
+    user = value;
+    name = value?.name;
+    email = value?.email;
+    photoUrl = value?.photoUrl;
+    state = value?.state;
+    gender = value?.gender;
+  }
 
   String? getphotoUrl() => photoUrl;
 
@@ -84,7 +94,7 @@ abstract class _UserStoreBase with Store {
   @computed
   String? get stateError {
     if (showErrors && (state == null || state!.isEmpty)) {
-      return 'Estado é obrigatório';
+      return 'Selecione um estado';
     }
     return null;
   }
@@ -92,13 +102,10 @@ abstract class _UserStoreBase with Store {
   @computed
   String? get genderError {
     if (showErrors && (gender == null || gender!.isEmpty)) {
-      return 'Gênero é obrigatório';
+      return 'Selecione um gênero';
     }
     return null;
   }
-
-  @action
-  void setUser(User? value) => user = value;
 
   Future<void> getCurrentUser() async {
     if (authService.currentUser != null) {
@@ -108,26 +115,22 @@ abstract class _UserStoreBase with Store {
     final user = await UserRepository().getUser();
 
     if (user != null) {
-      setUser(User.fromJson(user));
-      setName(user['name']);
-      setGender(user['gender']);
-      setState(user['state']);
-      setPhotoUrl(user['photoUrl']);
+      setUser(UserModel.fromJson(user));
     }
   }
 
   Future<void> setUserData() async {
-    final user = User(
+    setUser(UserModel(
       id: authService.currentUser!.uid,
       name: name!,
       state: state!,
       email: email!,
       gender: gender!,
       photoUrl: photoUrl,
-    );
+    ));
 
     try {
-      await UserRepository().setUser(user.toJson());
+      await UserRepository().setUser(user!.toJson());
     } catch (e) {
       inspect(e);
     }

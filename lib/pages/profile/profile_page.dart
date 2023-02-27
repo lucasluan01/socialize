@@ -56,9 +56,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     }),
                     const SizedBox(height: 16),
-                    const DropdownCustom(dropdownType: "Estado"),
+                    Observer(builder: (_) {
+                      return DropdownCustom(
+                        dropdownType: "Estado",
+                        labelText: "Estado",
+                        initialValue: userStore.state,
+                        messageError: userStore.stateError,
+                        onChanged: userStore.setState,
+                      );
+                    }),
                     const SizedBox(height: 16),
-                    const DropdownCustom(dropdownType: "Gênero"),
+                    Observer(builder: (_) {
+                      return DropdownCustom(
+                        dropdownType: "Gênero",
+                        labelText: "Gênero",
+                        initialValue: userStore.gender,
+                        messageError: userStore.genderError,
+                        onChanged: userStore.setGender,
+                      );
+                    }),
                     const SizedBox(height: 16),
                     Observer(builder: (context) {
                       return TextFormField(

@@ -6,10 +6,16 @@ import 'package:socialize/stores/user_store.dart';
 class DropdownCustom extends StatefulWidget {
   const DropdownCustom({
     required this.dropdownType,
+    required this.onChanged,
+    required this.labelText,
+    required this.initialValue,
+    this.messageError,
     super.key,
   });
 
-  final String dropdownType;
+  final String dropdownType, labelText;
+  final String? messageError, initialValue;
+  final Function(String?) onChanged;
 
   @override
   State<DropdownCustom> createState() => _DropdownCustomState();
@@ -54,8 +60,6 @@ class _DropdownCustomState extends State<DropdownCustom> {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = GetIt.instance<UserStore>();
-
     if (widget.dropdownType == "Gênero") {
       options = gender;
     } else if (widget.dropdownType == "Estado") {
@@ -66,25 +70,15 @@ class _DropdownCustomState extends State<DropdownCustom> {
       return DropdownButtonFormField(
         icon: const Icon(Icons.keyboard_arrow_down_outlined),
         iconSize: 24,
-        value: widget.dropdownType == "Gênero"
-            ? userStore.gender
-            : userStore.state,
+        value: widget.initialValue,
         elevation: 16,
         decoration: InputDecoration(
-          labelText: widget.dropdownType,
+          labelText: widget.labelText,
           border: const OutlineInputBorder(),
-          errorText: widget.dropdownType == "Gênero"
-              ? userStore.genderError
-              : userStore.stateError,
+          errorText: widget.messageError,
         ),
-        validator: (value) => value == null
-            ? widget.dropdownType == "Gênero"
-                ? userStore.genderError
-                : userStore.stateError
-            : null,
-        onChanged: (value) => widget.dropdownType == "Gênero"
-            ? userStore.setGender(value.toString())
-            : userStore.setState(value.toString()),
+        validator: (value) => widget.messageError,
+        onChanged: (value) => widget.onChanged(value),
         items: options.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
