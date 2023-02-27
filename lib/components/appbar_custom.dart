@@ -28,7 +28,7 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
             if (value == 1) {
               Navigator.pushNamed(context, '/profile');
             } else if (value == 2) {
-              // _showDialog(context);
+              // TODO: Implementar logout
             }
           },
         ),

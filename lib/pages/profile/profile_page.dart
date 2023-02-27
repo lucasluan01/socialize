@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/dropdown_custom.dart';
+import 'package:socialize/pages/profile/components/circle_avatar_custom.dart';
 import 'package:socialize/stores/user_store.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -13,6 +14,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final userStore = GetIt.instance<UserStore>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    userStore.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,31 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(
-                      child: Stack(
-                        children: [
-                          const CircleAvatar(
-                            radius: 60,
-                            backgroundImage: NetworkImage(
-                              'https://avatars.githubusercontent.com/u/55942632?v=4',
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const CircleAvatarCustom(),
                     const SizedBox(height: 32),
                     Observer(builder: (_) {
                       return TextFormField(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -42,6 +44,7 @@ class LoginPage extends StatelessWidget {
                         Navigator.pushNamed(context, '/profile');
                       }
                     } catch (e) {
+                      inspect(e);
                       final snackBar = SnackBar(
                         content: const Text('Algo de errado não está certo.'),
                         backgroundColor: Colors.red,

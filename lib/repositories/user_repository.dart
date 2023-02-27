@@ -1,6 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UserRepository {
   final authService = GetIt.instance<AuthService>();
@@ -37,5 +41,18 @@ class UserRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<String?> uploadAvatar(File photoFile) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final mountainsRef = storageRef.child("${authService.currentUser!.uid}.jpg");
+
+    try {
+      await mountainsRef.putFile(photoFile);
+      return await mountainsRef.getDownloadURL();
+    } on FirebaseException catch (e) {
+      inspect(e);
+    }
+    return null;
   }
 }

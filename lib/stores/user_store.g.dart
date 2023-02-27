@@ -9,6 +9,13 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserStore on _UserStoreBase, Store {
+  Computed<String>? _$nameInitialsComputed;
+
+  @override
+  String get nameInitials =>
+      (_$nameInitialsComputed ??= Computed<String>(() => super.nameInitials,
+              name: '_UserStoreBase.nameInitials'))
+          .value;
   Computed<bool>? _$isFormValidComputed;
 
   @override
@@ -22,13 +29,6 @@ mixin _$UserStore on _UserStoreBase, Store {
   String? get nameError =>
       (_$nameErrorComputed ??= Computed<String?>(() => super.nameError,
               name: '_UserStoreBase.nameError'))
-          .value;
-  Computed<String?>? _$photoUrlErrorComputed;
-
-  @override
-  String? get photoUrlError =>
-      (_$photoUrlErrorComputed ??= Computed<String?>(() => super.photoUrlError,
-              name: '_UserStoreBase.photoUrlError'))
           .value;
   Computed<String?>? _$stateErrorComputed;
 
@@ -153,6 +153,38 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
+  late final _$photoFileAtom =
+      Atom(name: '_UserStoreBase.photoFile', context: context);
+
+  @override
+  File? get photoFile {
+    _$photoFileAtom.reportRead();
+    return super.photoFile;
+  }
+
+  @override
+  set photoFile(File? value) {
+    _$photoFileAtom.reportWrite(value, super.photoFile, () {
+      super.photoFile = value;
+    });
+  }
+
+  late final _$pressedSaveAsyncAction =
+      AsyncAction('_UserStoreBase.pressedSave', context: context);
+
+  @override
+  Future<void> pressedSave() {
+    return _$pressedSaveAsyncAction.run(() => super.pressedSave());
+  }
+
+  late final _$selectImageAsyncAction =
+      AsyncAction('_UserStoreBase.selectImage', context: context);
+
+  @override
+  Future<void> selectImage(String resource) {
+    return _$selectImageAsyncAction.run(() => super.selectImage(resource));
+  }
+
   late final _$_UserStoreBaseActionController =
       ActionController(name: '_UserStoreBase', context: context);
 
@@ -223,11 +255,11 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
-  void pressedSave() {
+  void dispose() {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.pressedSave');
+        name: '_UserStoreBase.dispose');
     try {
-      return super.pressedSave();
+      return super.dispose();
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -243,9 +275,10 @@ email: ${email},
 photoUrl: ${photoUrl},
 state: ${state},
 gender: ${gender},
+photoFile: ${photoFile},
+nameInitials: ${nameInitials},
 isFormValid: ${isFormValid},
 nameError: ${nameError},
-photoUrlError: ${photoUrlError},
 stateError: ${stateError},
 genderError: ${genderError}
     ''';
