@@ -36,4 +36,12 @@ abstract class _TalksStoreBase with Store {
     newsTalks =
         resultSearchTalks?.map((e) => UserModel.fromJson(e.data())).toList();
   }
+
+  Future<String> createNewRoom() async {
+    return await talksRepository.createNewRoom();
+  }
+
+  Future<void> createNewContact(String id, String idNewChat) async {
+    await talksRepository.createNewContact(id, idNewChat);
+  }
 }

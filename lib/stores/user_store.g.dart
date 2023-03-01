@@ -44,6 +44,15 @@ mixin _$UserStore on _UserStoreBase, Store {
       (_$genderErrorComputed ??= Computed<String?>(() => super.genderError,
               name: '_UserStoreBase.genderError'))
           .value;
+  Computed<CollectionReference<Map<String, dynamic>>>? _$userFirebaseComputed;
+
+  @override
+  CollectionReference<Map<String, dynamic>> get userFirebase =>
+      (_$userFirebaseComputed ??=
+              Computed<CollectionReference<Map<String, dynamic>>>(
+                  () => super.userFirebase,
+                  name: '_UserStoreBase.userFirebase'))
+          .value;
 
   late final _$userAtom = Atom(name: '_UserStoreBase.user', context: context);
 
@@ -60,6 +69,22 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
+  late final _$contactsAtom =
+      Atom(name: '_UserStoreBase.contacts', context: context);
+
+  @override
+  List<Map<String, dynamic>>? get contacts {
+    _$contactsAtom.reportRead();
+    return super.contacts;
+  }
+
+  @override
+  set contacts(List<Map<String, dynamic>>? value) {
+    _$contactsAtom.reportWrite(value, super.contacts, () {
+      super.contacts = value;
+    });
+  }
+
   late final _$showErrorsAtom =
       Atom(name: '_UserStoreBase.showErrors', context: context);
 
@@ -73,6 +98,22 @@ mixin _$UserStore on _UserStoreBase, Store {
   set showErrors(bool value) {
     _$showErrorsAtom.reportWrite(value, super.showErrors, () {
       super.showErrors = value;
+    });
+  }
+
+  late final _$loadingConversationAtom =
+      Atom(name: '_UserStoreBase.loadingConversation', context: context);
+
+  @override
+  bool get loadingConversation {
+    _$loadingConversationAtom.reportRead();
+    return super.loadingConversation;
+  }
+
+  @override
+  set loadingConversation(bool value) {
+    _$loadingConversationAtom.reportWrite(value, super.loadingConversation, () {
+      super.loadingConversation = value;
     });
   }
 
@@ -169,6 +210,30 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
+  late final _$userDocumentAtom =
+      Atom(name: '_UserStoreBase.userDocument', context: context);
+
+  @override
+  List<QueryDocumentSnapshot<Object?>>? get userDocument {
+    _$userDocumentAtom.reportRead();
+    return super.userDocument;
+  }
+
+  @override
+  set userDocument(List<QueryDocumentSnapshot<Object?>>? value) {
+    _$userDocumentAtom.reportWrite(value, super.userDocument, () {
+      super.userDocument = value;
+    });
+  }
+
+  late final _$getCurrentUserAsyncAction =
+      AsyncAction('_UserStoreBase.getCurrentUser', context: context);
+
+  @override
+  Future<void> getCurrentUser() {
+    return _$getCurrentUserAsyncAction.run(() => super.getCurrentUser());
+  }
+
   late final _$pressedSaveAsyncAction =
       AsyncAction('_UserStoreBase.pressedSave', context: context);
 
@@ -183,6 +248,15 @@ mixin _$UserStore on _UserStoreBase, Store {
   @override
   Future<void> selectImage(String resource) {
     return _$selectImageAsyncAction.run(() => super.selectImage(resource));
+  }
+
+  late final _$loadConversationResumeAsyncAction =
+      AsyncAction('_UserStoreBase.loadConversationResume', context: context);
+
+  @override
+  Future<void> loadConversationResume() {
+    return _$loadConversationResumeAsyncAction
+        .run(() => super.loadConversationResume());
   }
 
   late final _$_UserStoreBaseActionController =
@@ -266,21 +340,36 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
+  void listenToUser() {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.listenToUser');
+    try {
+      return super.listenToUser();
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 user: ${user},
+contacts: ${contacts},
 showErrors: ${showErrors},
+loadingConversation: ${loadingConversation},
 name: ${name},
 email: ${email},
 photoUrl: ${photoUrl},
 state: ${state},
 gender: ${gender},
 photoFile: ${photoFile},
+userDocument: ${userDocument},
 nameInitials: ${nameInitials},
 isFormValid: ${isFormValid},
 nameError: ${nameError},
 stateError: ${stateError},
-genderError: ${genderError}
+genderError: ${genderError},
+userFirebase: ${userFirebase}
     ''';
   }
 }

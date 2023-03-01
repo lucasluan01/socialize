@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
 import 'package:socialize/routes.dart';
+import 'package:socialize/stores/chat_store.dart';
 import 'package:socialize/stores/user_store.dart';
 import 'package:socialize/stores/talks_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   setupLocators();
 
   runApp(const MyApp());
@@ -19,6 +19,7 @@ void setupLocators() {
   GetIt.I.registerSingleton<AuthService>(AuthService());
   GetIt.I.registerSingleton<UserStore>(UserStore());
   GetIt.I.registerSingleton<TalksStore>(TalksStore());
+  GetIt.I.registerSingleton<ChatStore>(ChatStore());
 }
 
 class MyApp extends StatelessWidget {
