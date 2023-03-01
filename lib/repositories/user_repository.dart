@@ -12,33 +12,14 @@ class UserRepository {
   Future<Map<String, dynamic>?> getUser() async {
     if (authService.currentUser == null) return null;
 
-    var user = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(authService.currentUser!.uid)
-        .get();
-    return user.data();
-  }
-
-  Future<List<Map<String, dynamic>>?> getContacts() async {
-    List<Map<String, dynamic>> contacts = [];
     try {
-      await FirebaseFirestore.instance
+      var user = await FirebaseFirestore.instance
           .collection('users')
           .doc(authService.currentUser!.uid)
-          .collection('contacts')
-          .get()
-          .then((value) async {
-        for (var item in value.docs) {
-          if (item.id != 'default') {
-            contacts.add(item.data());
-          }
-        }
-      });
-
-      return contacts;
+          .get();
+      return user.data();
     } catch (e) {
       inspect(e);
-      rethrow;
     }
   }
 
@@ -51,15 +32,14 @@ class UserRepository {
           .collection('users')
           .where('id',
               whereIn: contacts?.map((e) => e.idContact).toList() ?? [])
+          .where('title', isNotEqualTo: '')
           .get()
           .then((value) async {
         for (var item in value.docs) {
-          if (item.id != 'default') {
-            var contact =
-                contacts!.firstWhere((element) => element.idContact == item.id);
-            contact.photoUrl = item.get('photoUrl');
-            contact.name = item.get('name');
-          }
+          var contact =
+              contacts!.firstWhere((element) => element.idContact == item.id);
+          contact.photoUrl = item.get('photoUrl');
+          contact.name = item.get('name');
         }
       });
 
@@ -67,16 +47,15 @@ class UserRepository {
           .collection('chat_rooms')
           .where(FieldPath.documentId,
               whereIn: contacts?.map((e) => e.idChatRoom).toList() ?? [])
+          .where('title', isNotEqualTo: '')
           .get()
           .then((value) async {
         for (var item in value.docs) {
-          if (item.id != 'default') {
-            var contact = contacts!
-                .firstWhere((element) => element.idChatRoom == item.id);
-            contact.lastMessage = item.get('lastMessage');
-            contact.lastMessageTime =
-                DateTime.parse(item.get('lastMessageTime').toDate().toString());
-          }
+          var contact =
+              contacts!.firstWhere((element) => element.idChatRoom == item.id);
+          contact.lastMessage = item.get('lastMessage');
+          contact.lastMessageTime =
+              DateTime.parse(item.get('lastMessageTime').toDate().toString());
         }
       });
     } catch (e) {

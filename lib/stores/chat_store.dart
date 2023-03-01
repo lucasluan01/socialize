@@ -27,9 +27,8 @@ abstract class _ChatStoreBase with Store {
 
   @action
   void listenToMyDocuments() {
-    chatRoom.snapshots().listen((snapshot) {
+    chatRoom.where('title', isNotEqualTo: '').snapshots().listen((snapshot) {
       messages = snapshot.docs;
     });
   }
 }
- 

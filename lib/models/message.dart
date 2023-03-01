@@ -5,7 +5,7 @@ class MessageModel {
     required this.shippingDate,
   });
 
-  late final String idSender;
+  late final String? idSender;
   late final String content;
   late final DateTime shippingDate;
 

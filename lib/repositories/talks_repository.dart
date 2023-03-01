@@ -33,7 +33,7 @@ class TalksRepository {
         'lastMessage': 'Última mensagem',
         'lastMessageTime': DateTime.now(),
       }).then((value) {
-        value.collection("messages").doc('default').set({});
+        value.collection("messages").doc().set({});
         return value.id;
       });
     } catch (e) {
@@ -48,10 +48,7 @@ class TalksRepository {
           .doc(authService.currentUser!.uid)
           .collection('contacts')
           .doc(id)
-          .set({
-        'idContact': id,
-        'idChatRoom': idNewChat
-      });
+          .set({'idContact': id, 'idChatRoom': idNewChat});
     } catch (e) {
       rethrow;
     }

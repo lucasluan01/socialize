@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
@@ -25,7 +26,10 @@ abstract class _UserStoreBase with Store {
   UserModel? user;
 
   @observable
-  bool showErrors = false;
+  List<Map<String, dynamic>>? contacts;
+
+  @observable
+  bool showErrors = false, loadingConversation = true;
 
   @observable
   String? name, email, photoUrl, state, gender;
@@ -111,13 +115,13 @@ abstract class _UserStoreBase with Store {
   @action
   Future<void> getCurrentUser() async {
     if (authService.currentUser != null) {
+      listenToUser();
       setEmail(authService.currentUser!.email);
     }
 
     final user = await UserRepository().getUser();
 
     if (user != null) {
-      final contacts = await UserRepository().getContacts();
       user['contacts'] = contacts;
       setUser(UserModel.fromJson(user));
     }
@@ -187,10 +191,31 @@ abstract class _UserStoreBase with Store {
   Future<void> loadConversationResume() async {
     final userRepository = UserRepository();
     await userRepository.getConversationResume();
+    loadingConversation = false;
   }
 
   @action
   void dispose() {
     photoFile = null;
+  }
+
+  @observable
+  List<QueryDocumentSnapshot>? userDocument;
+
+  @computed
+  CollectionReference<Map<String, dynamic>> get userFirebase =>
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(authService.currentUser!.uid)
+          .collection("contacts");
+
+  @action
+  void listenToUser() {
+    userFirebase
+        .where('title', isNotEqualTo: '')
+        .snapshots()
+        .listen((snapshot) {
+      contacts = snapshot.docs.map((e) => e.data()).toList();
+    });
   }
 }
