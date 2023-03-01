@@ -13,7 +13,7 @@ abstract class _ChatStoreBase with Store {
   List<QueryDocumentSnapshot> messages = [];
 
   @observable
-  String? idChat = '7RiFe4DTYQTVVBqLjVtF';
+  String? idChat;
 
   @computed
   CollectionReference<Map<String, dynamic>> get chatRoom =>
@@ -27,11 +27,9 @@ abstract class _ChatStoreBase with Store {
 
   @action
   void listenToMyDocuments() {
-    inspect(chatRoom);
     chatRoom.snapshots().listen((snapshot) {
       messages = snapshot.docs;
-
-      inspect(messages);
     });
   }
 }
+ 

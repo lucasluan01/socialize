@@ -50,7 +50,6 @@ class TalksRepository {
           .doc(id)
           .set({
         'idContact': id,
-        'nickname': 'DEFAULT',
         'idChatRoom': idNewChat
       });
     } catch (e) {

@@ -10,7 +10,6 @@ import 'package:socialize/stores/talks_store.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   setupLocators();
 
   runApp(const MyApp());

@@ -184,6 +184,12 @@ abstract class _UserStoreBase with Store {
   }
 
   @action
+  Future<void> loadConversationResume() async {
+    final userRepository = UserRepository();
+    await userRepository.getConversationResume();
+  }
+
+  @action
   void dispose() {
     photoFile = null;
   }
