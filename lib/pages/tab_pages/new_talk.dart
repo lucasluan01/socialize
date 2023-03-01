@@ -45,6 +45,7 @@ class _NewTalkPageState extends State<NewTalkPage> {
                   .map((e) => NewContactCustom(
                         name: e.name,
                         photoUrl: e.photoUrl,
+                        id: e.id,
                       ))
                   .toList(),
             );

@@ -14,7 +14,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
-
+    final userStore = GetIt.instance<UserStore>();
+    
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -32,7 +33,6 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await authService.signInwithGoogle();
-                      final userStore = GetIt.instance<UserStore>();
                       await userStore.getCurrentUser();
 
                       if (FirebaseAuth.instance.currentUser != null &&
