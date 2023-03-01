@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,7 +12,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
     final userStore = GetIt.instance<UserStore>();
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -31,30 +28,19 @@ class LoginPage extends StatelessWidget {
               Observer(builder: (_) {
                 return OutlinedButton(
                   onPressed: () async {
-                    try {
-                      await authService.signInwithGoogle();
-                      await userStore.getCurrentUser();
+                    await authService.signInwithGoogle();
 
-                      if (FirebaseAuth.instance.currentUser != null &&
-                          userStore.user != null) {
+                    if (authService.currentUser != null) {
+                      await userStore.loadCurrentUserData();
+
+                      if (userStore.user != null) {
                         // ignore: use_build_context_synchronously
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/home', (route) => false);
                       } else {
                         // ignore: use_build_context_synchronously
                         Navigator.pushNamed(context, '/profile');
                       }
-                    } catch (e) {
-                      inspect(e);
-                      final snackBar = SnackBar(
-                        content: const Text('Algo de errado não está certo.'),
-                        backgroundColor: Colors.red,
-                        action: SnackBarAction(
-                          label: 'Fechar',
-                          textColor: Colors.white,
-                          onPressed: () {},
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
                   child: Row(

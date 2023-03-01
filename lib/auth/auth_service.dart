@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:socialize/exceptions.dart';
 import 'package:socialize/stores/user_store.dart';
 
 class AuthService {
@@ -9,10 +14,9 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  bool isLoading = true;
-
   Future<void> signInwithGoogle() async {
     try {
+      signOut();
       GoogleSignInAccount? googleAccount = await _googleSignIn.signIn();
 
       if (googleAccount != null) {
@@ -28,8 +32,14 @@ class AuthService {
             await _auth.signInWithCredential(credential);
         _currtentUser = authResult.user!;
       }
-    } on FirebaseAuthException {
-      rethrow;
+    } catch (e) {
+      final errorMessage = getFirebaseExceptionMessage(e);
+      Fluttertoast.showToast(
+        backgroundColor: Colors.red,
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
     }
   }
 

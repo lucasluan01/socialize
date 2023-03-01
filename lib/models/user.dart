@@ -16,7 +16,7 @@ class UserModel {
   late final String state;
   late final String email;
   late final String gender;
-  late final List<ContactModel>? contacts;
+  List<ContactModel>? contacts;
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,7 +38,6 @@ class UserModel {
     data['state'] = state;
     data['email'] = email;
     data['gender'] = gender;
-    data['contacts'] = contacts?.map((e) => e.toJson()).toList();
     return data;
   }
 }

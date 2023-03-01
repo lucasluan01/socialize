@@ -83,6 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           border: OutlineInputBorder(),
                           filled: true,
                         ),
+                        keyboardType: TextInputType.emailAddress,
                         initialValue: userStore.email,
                         enabled: false,
                       );
@@ -93,7 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         await userStore.pressedSave();
                         userStore.isFormValid
                             // ignore: use_build_context_synchronously
-                            ? Navigator.pushReplacementNamed(context, '/home')
+                            ? Navigator.pushNamedAndRemoveUntil(
+                                context, '/home', (route) => false)
                             : null;
                       },
                       child: const Text('Salvar'),
