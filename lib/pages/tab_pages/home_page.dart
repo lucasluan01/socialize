@@ -12,12 +12,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16.0),
-      children: const [
-        // ContactCustom(),
-        // ContactCustom(),
-        // ContactCustom(),
-        // ContactCustom(),
-        // ContactCustom(),
+      children: [
+        ElevatedButton(
+          onPressed: () => Navigator.pushNamed(context, '/chat'),
+          child: const Text("Entrar no chat"),
+        ),
       ],
     );
   }

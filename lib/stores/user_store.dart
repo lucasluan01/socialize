@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:socialize/auth/auth_service.dart';
+import 'package:socialize/models/contact.dart';
 import 'package:socialize/models/user.dart';
 import 'package:socialize/repositories/user_repository.dart';
 
@@ -107,6 +108,7 @@ abstract class _UserStoreBase with Store {
     return null;
   }
 
+  @action
   Future<void> getCurrentUser() async {
     if (authService.currentUser != null) {
       setEmail(authService.currentUser!.email);
@@ -115,6 +117,8 @@ abstract class _UserStoreBase with Store {
     final user = await UserRepository().getUser();
 
     if (user != null) {
+      final contacts = await UserRepository().getContacts();
+      user['contacts'] = contacts;
       setUser(UserModel.fromJson(user));
     }
   }
@@ -127,6 +131,7 @@ abstract class _UserStoreBase with Store {
       email: email!,
       gender: gender!,
       photoUrl: photoUrl,
+      contacts: user?.contacts ?? <ContactModel>[],
     ));
 
     try {

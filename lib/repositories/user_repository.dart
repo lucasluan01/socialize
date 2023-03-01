@@ -19,6 +19,29 @@ class UserRepository {
     return user.data();
   }
 
+  Future<List<Map<String, dynamic>>?> getContacts() async {
+    List<Map<String, dynamic>> contacts = [];
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(authService.currentUser!.uid)
+          .collection('contacts')
+          .get()
+          .then((value) async {
+        for (var item in value.docs) {
+          if (item.id != 'default') {
+            contacts.add(item.data());
+          }
+        }
+      });
+
+      return contacts;
+    } catch (e) {
+      inspect(e);
+      rethrow;
+    }
+  }
+
   Future<void> setUser(Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance

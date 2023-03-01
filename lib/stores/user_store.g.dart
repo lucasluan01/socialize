@@ -169,6 +169,14 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
+  late final _$getCurrentUserAsyncAction =
+      AsyncAction('_UserStoreBase.getCurrentUser', context: context);
+
+  @override
+  Future<void> getCurrentUser() {
+    return _$getCurrentUserAsyncAction.run(() => super.getCurrentUser());
+  }
+
   late final _$pressedSaveAsyncAction =
       AsyncAction('_UserStoreBase.pressedSave', context: context);
 
