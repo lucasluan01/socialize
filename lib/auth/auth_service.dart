@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:socialize/exceptions.dart';
-import 'package:socialize/stores/user_store.dart';
 
 class AuthService {
   User? _currtentUser;
@@ -16,7 +12,6 @@ class AuthService {
 
   Future<void> signInwithGoogle() async {
     try {
-      signOut();
       GoogleSignInAccount? googleAccount = await _googleSignIn.signIn();
 
       if (googleAccount != null) {
@@ -43,14 +38,11 @@ class AuthService {
     }
   }
 
-  // TODO: signOut não está funcionando
   Future<void> signOut() async {
     try {
+      _currtentUser = null;
       await _auth.signOut();
       await _googleSignIn.signOut();
-
-      var user = GetIt.instance<UserStore>();
-      user.setUser(null);
     } catch (e) {
       rethrow;
     }
