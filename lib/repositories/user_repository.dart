@@ -51,21 +51,22 @@ class UserRepository {
         }
       });
 
-      await FirebaseFirestore.instance
-          .collection('chat_rooms')
-          .where(FieldPath.documentId,
-              whereIn: contacts?.map((e) => e['idChatRoom']).toList() ?? [])
-          .where(FieldPath.documentId, isNotEqualTo: 'empty')
-          .get()
-          .then((value) async {
-        for (var item in value.docs) {
-          var contact = contacts!
-              .firstWhere((element) => element['idChatRoom'] == item.id);
-          contact['lastMessage'] = item.get('lastMessage');
-          contact['lastMessageTime'] =
-              DateTime.parse(item.get('lastMessageTime').toDate().toString());
-        }
-      });
+      // await FirebaseFirestore.instance
+      //     .collection('chat_rooms')
+      //     .where(FieldPath.documentId,
+      //         whereIn: contacts?.map((e) => e['idChatRoom']).toList() ?? [])
+      //         // TODO: remover essa linha, parece não ser necessária
+      //     // .where(FieldPath.documentId, isNotEqualTo: 'empty')
+      //     .get()
+      //     .then((value) async {
+      //   for (var item in value.docs) {
+      //     var contact = contacts!
+      //         .firstWhere((element) => element['idChatRoom'] == item.id);
+      //     contact['lastMessage'] = item.get('lastMessage');
+      //     contact['lastMessageTime'] =
+      //         DateTime.parse(item.get('lastMessageTime').toDate().toString());
+      //   }
+      // });
     } catch (e) {
       inspect(e);
     }

@@ -44,16 +44,22 @@ mixin _$UserStore on _UserStoreBase, Store {
       (_$genderErrorComputed ??= Computed<String?>(() => super.genderError,
               name: '_UserStoreBase.genderError'))
           .value;
-  Computed<CollectionReference<Map<String, dynamic>>>?
-      _$userContactCollectionComputed;
+
+  late final _$userDocumentAtom =
+      Atom(name: '_UserStoreBase.userDocument', context: context);
 
   @override
-  CollectionReference<Map<String, dynamic>> get userContactCollection =>
-      (_$userContactCollectionComputed ??=
-              Computed<CollectionReference<Map<String, dynamic>>>(
-                  () => super.userContactCollection,
-                  name: '_UserStoreBase.userContactCollection'))
-          .value;
+  List<QueryDocumentSnapshot<Object?>>? get userDocument {
+    _$userDocumentAtom.reportRead();
+    return super.userDocument;
+  }
+
+  @override
+  set userDocument(List<QueryDocumentSnapshot<Object?>>? value) {
+    _$userDocumentAtom.reportWrite(value, super.userDocument, () {
+      super.userDocument = value;
+    });
+  }
 
   late final _$userAtom = Atom(name: '_UserStoreBase.user', context: context);
 
@@ -211,22 +217,6 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
-  late final _$userDocumentAtom =
-      Atom(name: '_UserStoreBase.userDocument', context: context);
-
-  @override
-  List<QueryDocumentSnapshot<Object?>>? get userDocument {
-    _$userDocumentAtom.reportRead();
-    return super.userDocument;
-  }
-
-  @override
-  set userDocument(List<QueryDocumentSnapshot<Object?>>? value) {
-    _$userDocumentAtom.reportWrite(value, super.userDocument, () {
-      super.userDocument = value;
-    });
-  }
-
   late final _$loadCurrentUserDataAsyncAction =
       AsyncAction('_UserStoreBase.loadCurrentUserData', context: context);
 
@@ -322,6 +312,28 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
+  void listenToUserContacts() {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.listenToUserContacts');
+    try {
+      return super.listenToUserContacts();
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void listenToConversationSummary() {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.listenToConversationSummary');
+    try {
+      return super.listenToConversationSummary();
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void dispose() {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
         name: '_UserStoreBase.dispose');
@@ -333,19 +345,9 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
-  void listenToUserConversations() {
-    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.listenToUserConversations');
-    try {
-      return super.listenToUserConversations();
-    } finally {
-      _$_UserStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
+userDocument: ${userDocument},
 user: ${user},
 contacts: ${contacts},
 showErrors: ${showErrors},
@@ -356,13 +358,11 @@ photoUrl: ${photoUrl},
 state: ${state},
 gender: ${gender},
 photoFile: ${photoFile},
-userDocument: ${userDocument},
 nameInitials: ${nameInitials},
 isFormValid: ${isFormValid},
 nameError: ${nameError},
 stateError: ${stateError},
-genderError: ${genderError},
-userContactCollection: ${userContactCollection}
+genderError: ${genderError}
     ''';
   }
 }

@@ -13,6 +13,8 @@ class LoginPage extends StatelessWidget {
     final authService = GetIt.instance<AuthService>();
     final userStore = GetIt.instance<UserStore>();
 
+    // userStore.dispose();
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(

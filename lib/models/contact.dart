@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ContactModel {
   ContactModel({
     required this.idContact,
@@ -12,7 +14,7 @@ class ContactModel {
   late String? name;
   late String? lastMessage;
   late String? photoUrl;
-  late DateTime? lastMessageTime;
+  late Timestamp? lastMessageTime;
 
   ContactModel.fromJson(Map<String, dynamic> json) {
     idContact = json['idContact'];

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MessageModel {
   MessageModel({
     required this.idSender,
@@ -7,12 +9,12 @@ class MessageModel {
 
   late final String? idSender;
   late final String content;
-  late final DateTime shippingDate;
+  late final Timestamp shippingDate;
 
   MessageModel.fromJson(Map<String, dynamic> json) {
     idSender = json['idSender'];
     content = json['content'];
-    shippingDate = DateTime.parse(json['shippingDate'].toDate().toString());
+    shippingDate = json['shippingDate'];
   }
 
   Map<String, dynamic> toJson() {

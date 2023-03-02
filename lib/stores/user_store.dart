@@ -23,6 +23,9 @@ abstract class _UserStoreBase with Store {
   final userRepository = UserRepository();
 
   @observable
+  List<QueryDocumentSnapshot>? userDocument;
+
+  @observable
   UserModel? user;
 
   @observable
@@ -60,6 +63,8 @@ abstract class _UserStoreBase with Store {
     photoUrl = value?.photoUrl;
     state = value?.state;
     gender = value?.gender;
+    contacts = value?.contacts?.map((e) => e.toJson()).toList() ??
+        <Map<String, dynamic>>[];
   }
 
   String? getphotoUrl() => photoUrl;
@@ -191,33 +196,44 @@ abstract class _UserStoreBase with Store {
   }
 
   @action
-  void dispose() {
-    // TODO: Verificar se faz sentido manter photoFile no futuro
-    photoFile = null;
-    showErrors = false;
-  }
-
-  @observable
-  List<QueryDocumentSnapshot>? userDocument;
-
-  @computed
-  CollectionReference<Map<String, dynamic>> get userContactCollection =>
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(authService.currentUser!.uid)
-          .collection("contacts");
-
-  @action
-  void listenToUserConversations() {
-    userContactCollection
+  void listenToUserContacts() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(authService.currentUser!.uid)
+        .collection("contacts")
         .where(FieldPath.documentId, isNotEqualTo: 'empty')
         .snapshots()
         .listen((snapshot) async {
       loadingConversation = true;
       contacts = snapshot.docs.map((e) => e.data()).toList();
       await userRepository.getConversationResume();
+      listenToConversationSummary();
       user!.contacts = contacts!.map((e) => ContactModel.fromJson(e)).toList();
       loadingConversation = false;
     });
+  }
+
+  @action
+  void listenToConversationSummary() {
+    FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .where(FieldPath.documentId,
+            whereIn: user!.contacts!.map((e) => e.idChatRoom).toList())
+        .snapshots()
+        .listen((snapshot) {
+      for (var element in contacts!) {
+        final chatRoom =
+            snapshot.docs.firstWhere((e) => e.id == element['idChatRoom']);
+        element['lastMessage'] = chatRoom.get('lastMessage');
+        element['lastMessageTime'] = chatRoom.get('lastMessageTime');
+      }
+      user!.contacts = contacts!.map((e) => ContactModel.fromJson(e)).toList();
+    });
+  }
+
+  @action
+  void dispose() {
+    photoFile = null;
+    showErrors = false;
   }
 }
