@@ -5,8 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:socialize/exceptions.dart';
 
 class AuthService {
-  User? _currtentUser;
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -18,14 +16,12 @@ class AuthService {
         final GoogleSignInAuthentication googleAuth =
             await googleAccount.authentication;
 
-        final AuthCredential credential = GoogleAuthProvider.credential(
+        final AuthCredential authCredential = GoogleAuthProvider.credential(
           idToken: googleAuth.idToken,
           accessToken: googleAuth.accessToken,
         );
 
-        final UserCredential authResult =
-            await _auth.signInWithCredential(credential);
-        _currtentUser = authResult.user!;
+        await _auth.signInWithCredential(authCredential);
       }
     } catch (e) {
       final errorMessage = getFirebaseExceptionMessage(e);
@@ -40,7 +36,6 @@ class AuthService {
 
   Future<void> signOut() async {
     try {
-      _currtentUser = null;
       await _auth.signOut();
       await _googleSignIn.signOut();
     } catch (e) {
@@ -49,6 +44,6 @@ class AuthService {
   }
 
   User? get currentUser {
-    return _currtentUser;
+    return _auth.currentUser;
   }
 }

@@ -11,7 +11,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
 
-    // userStore.dispose();
+    if (authService.currentUser != null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -29,7 +31,7 @@ class LoginPage extends StatelessWidget {
                 return OutlinedButton(
                   onPressed: () async {
                     await authService.signInwithGoogle();
-
+                    // TODO: falta resolver
                     // if (authService.currentUser != null) {
                     //   await userStore.loadCurrentUserData();
 
