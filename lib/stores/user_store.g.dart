@@ -44,14 +44,15 @@ mixin _$UserStore on _UserStoreBase, Store {
       (_$genderErrorComputed ??= Computed<String?>(() => super.genderError,
               name: '_UserStoreBase.genderError'))
           .value;
-  Computed<CollectionReference<Map<String, dynamic>>>? _$userFirebaseComputed;
+  Computed<CollectionReference<Map<String, dynamic>>>?
+      _$userContactCollectionComputed;
 
   @override
-  CollectionReference<Map<String, dynamic>> get userFirebase =>
-      (_$userFirebaseComputed ??=
+  CollectionReference<Map<String, dynamic>> get userContactCollection =>
+      (_$userContactCollectionComputed ??=
               Computed<CollectionReference<Map<String, dynamic>>>(
-                  () => super.userFirebase,
-                  name: '_UserStoreBase.userFirebase'))
+                  () => super.userContactCollection,
+                  name: '_UserStoreBase.userContactCollection'))
           .value;
 
   late final _$userAtom = Atom(name: '_UserStoreBase.user', context: context);
@@ -226,12 +227,13 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
-  late final _$getCurrentUserAsyncAction =
-      AsyncAction('_UserStoreBase.getCurrentUser', context: context);
+  late final _$loadCurrentUserDataAsyncAction =
+      AsyncAction('_UserStoreBase.loadCurrentUserData', context: context);
 
   @override
-  Future<void> getCurrentUser() {
-    return _$getCurrentUserAsyncAction.run(() => super.getCurrentUser());
+  Future<void> loadCurrentUserData() {
+    return _$loadCurrentUserDataAsyncAction
+        .run(() => super.loadCurrentUserData());
   }
 
   late final _$pressedSaveAsyncAction =
@@ -248,15 +250,6 @@ mixin _$UserStore on _UserStoreBase, Store {
   @override
   Future<void> selectImage(String resource) {
     return _$selectImageAsyncAction.run(() => super.selectImage(resource));
-  }
-
-  late final _$loadConversationResumeAsyncAction =
-      AsyncAction('_UserStoreBase.loadConversationResume', context: context);
-
-  @override
-  Future<void> loadConversationResume() {
-    return _$loadConversationResumeAsyncAction
-        .run(() => super.loadConversationResume());
   }
 
   late final _$_UserStoreBaseActionController =
@@ -340,11 +333,11 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
-  void listenToUser() {
+  void listenToUserConversations() {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.listenToUser');
+        name: '_UserStoreBase.listenToUserConversations');
     try {
-      return super.listenToUser();
+      return super.listenToUserConversations();
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -369,7 +362,7 @@ isFormValid: ${isFormValid},
 nameError: ${nameError},
 stateError: ${stateError},
 genderError: ${genderError},
-userFirebase: ${userFirebase}
+userContactCollection: ${userContactCollection}
     ''';
   }
 }

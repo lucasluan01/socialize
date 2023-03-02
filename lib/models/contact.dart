@@ -20,9 +20,7 @@ class ContactModel {
     idChatRoom = json['idChatRoom'];
     photoUrl = json['photoUrl'];
     lastMessage = json['lastMessage'];
-    lastMessageTime = json['lastMessageTime'] != null
-        ? DateTime.parse(json['lastMessageTime'].toDate().toString())
-        : null;
+    lastMessageTime = json['lastMessageTime'];
   }
 
   Map<String, dynamic> toJson() {

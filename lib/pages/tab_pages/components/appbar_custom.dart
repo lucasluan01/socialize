@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
 
 class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
@@ -9,7 +10,7 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthService();
+    final authService = GetIt.instance<AuthService>();
 
     return AppBar(
       title: const Text("Socialize"),
@@ -40,9 +41,9 @@ class AppBarCustom extends StatelessWidget with PreferredSizeWidget {
             if (value == 1) {
               Navigator.pushNamed(context, '/profile');
             } else if (value == 2) {
-              await authService.signOut();
-              // ignore: use_build_context_synchronously
-              Navigator.pushNamed(context, '/');
+              await authService.signOut().then((value) =>
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/', (route) => false));
             }
           },
         ),

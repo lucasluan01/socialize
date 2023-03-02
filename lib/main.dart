@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
 import 'package:socialize/routes.dart';
@@ -7,10 +8,20 @@ import 'package:socialize/stores/chat_store.dart';
 import 'package:socialize/stores/user_store.dart';
 import 'package:socialize/stores/talks_store.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setupLocators();
+
+  runApp(
+    MaterialApp(
+      builder: FToastBuilder(),
+      home: const MyApp(),
+      navigatorKey: navigatorKey,
+    ),
+  );
 
   runApp(const MyApp());
 }

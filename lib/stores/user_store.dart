@@ -2,10 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:socialize/auth/auth_service.dart';
+import 'package:socialize/exceptions.dart';
 import 'package:socialize/models/contact.dart';
 import 'package:socialize/models/user.dart';
 import 'package:socialize/repositories/user_repository.dart';
@@ -17,10 +20,7 @@ class UserStore = _UserStoreBase with _$UserStore;
 
 abstract class _UserStoreBase with Store {
   final authService = GetIt.instance<AuthService>();
-
-  _UserStoreBase() {
-    getCurrentUser();
-  }
+  final userRepository = UserRepository();
 
   @observable
   UserModel? user;
@@ -113,13 +113,10 @@ abstract class _UserStoreBase with Store {
   }
 
   @action
-  Future<void> getCurrentUser() async {
-    if (authService.currentUser != null) {
-      listenToUser();
-      setEmail(authService.currentUser!.email);
-    }
+  Future<void> loadCurrentUserData() async {
+    final user = await userRepository.getUserDocument();
 
-    final user = await UserRepository().getUser();
+    setEmail(authService.currentUser!.email);
 
     if (user != null) {
       user['contacts'] = contacts;
@@ -151,7 +148,13 @@ abstract class _UserStoreBase with Store {
         final url = await UserRepository().uploadAvatar(photoFile!);
         setPhotoUrl(url);
       } catch (e) {
-        inspect(e);
+        final errorMessage = getFirebaseExceptionMessage(e);
+        Fluttertoast.showToast(
+          backgroundColor: Colors.red,
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
       }
     }
   }
@@ -188,34 +191,33 @@ abstract class _UserStoreBase with Store {
   }
 
   @action
-  Future<void> loadConversationResume() async {
-    final userRepository = UserRepository();
-    await userRepository.getConversationResume();
-    loadingConversation = false;
-  }
-
-  @action
   void dispose() {
+    // TODO: Verificar se faz sentido manter photoFile no futuro
     photoFile = null;
+    showErrors = false;
   }
 
   @observable
   List<QueryDocumentSnapshot>? userDocument;
 
   @computed
-  CollectionReference<Map<String, dynamic>> get userFirebase =>
+  CollectionReference<Map<String, dynamic>> get userContactCollection =>
       FirebaseFirestore.instance
           .collection('users')
           .doc(authService.currentUser!.uid)
           .collection("contacts");
 
   @action
-  void listenToUser() {
-    userFirebase
-        .where('title', isNotEqualTo: '')
+  void listenToUserConversations() {
+    userContactCollection
+        .where(FieldPath.documentId, isNotEqualTo: 'empty')
         .snapshots()
-        .listen((snapshot) {
+        .listen((snapshot) async {
+      loadingConversation = true;
       contacts = snapshot.docs.map((e) => e.data()).toList();
+      await userRepository.getConversationResume();
+      user!.contacts = contacts!.map((e) => ContactModel.fromJson(e)).toList();
+      loadingConversation = false;
     });
   }
 }

@@ -33,7 +33,7 @@ class TalksRepository {
         'lastMessage': 'Última mensagem',
         'lastMessageTime': DateTime.now(),
       }).then((value) {
-        value.collection("messages").doc().set({});
+        value.collection('messages').doc('empty').set({});
         return value.id;
       });
     } catch (e) {
