@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
-import 'package:socialize/stores/user_store.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,7 +10,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
-    final userStore = GetIt.instance<UserStore>();
 
     // userStore.dispose();
 
@@ -32,18 +30,18 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     await authService.signInwithGoogle();
 
-                    if (authService.currentUser != null) {
-                      await userStore.loadCurrentUserData();
+                    // if (authService.currentUser != null) {
+                    //   await userStore.loadCurrentUserData();
 
-                      if (userStore.user != null) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, '/profile');
-                      }
-                    }
+                    //   if (userStore.user != null) {
+                    //     // ignore: use_build_context_synchronously
+                    //     Navigator.pushNamedAndRemoveUntil(
+                    //         context, '/home', (route) => false);
+                    //   } else {
+                    //     // ignore: use_build_context_synchronously
+                    //     Navigator.pushNamed(context, '/profile');
+                    //   }
+                    // }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
