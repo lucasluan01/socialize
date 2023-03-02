@@ -22,9 +22,13 @@ class _ConversationSummaryCustomState extends State<ConversationSummaryCustom> {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.all(0),
-      leading: const CircleAvatar(
-        child: Icon(Icons.person),
-      ),
+      leading: widget.contact.photoUrl != null
+          ? CircleAvatar(
+              backgroundImage: NetworkImage(widget.contact.photoUrl!),
+            )
+          : const CircleAvatar(
+              child: Icon(Icons.person),
+            ),
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(widget.contact.name!),
         // TODO: Implementar status
@@ -35,7 +39,10 @@ class _ConversationSummaryCustomState extends State<ConversationSummaryCustom> {
         // ),
         Text(
           widget.contact.lastMessageTime != null
-              ? DateFormat("HH:mm").format(widget.contact.lastMessageTime!)
+              ? DateFormat("HH:mm").format(
+                  DateTime.fromMicrosecondsSinceEpoch(
+                      widget.contact.lastMessageTime!.microsecondsSinceEpoch),
+                )
               : '',
           style: const TextStyle(
             color: Colors.black54,

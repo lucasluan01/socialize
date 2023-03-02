@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:socialize/pages/chat_page.dart';
+import 'package:socialize/pages/chat/chat_page.dart';
 import 'package:socialize/pages/tab_pages/tab_page.dart';
 import 'package:socialize/pages/login_page.dart';
 import 'package:socialize/pages/profile/profile_page.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
@@ -15,7 +17,8 @@ class TalksRepository {
           .collection('users')
           .where('id', whereNotIn: [
             authService.currentUser!.uid,
-            ...user.user?.contacts?.map((e) => e.idContact).toList() ?? []
+            ...user.user?.contacts?.map((e) => e.idContact).toList() ?? [],
+            'empty'
           ])
           .where('state', isEqualTo: state)
           .get();
@@ -50,7 +53,7 @@ class TalksRepository {
           .doc(id)
           .set({'idContact': id, 'idChatRoom': idNewChat});
     } catch (e) {
-      rethrow;
+      inspect(e);
     }
   }
 }
