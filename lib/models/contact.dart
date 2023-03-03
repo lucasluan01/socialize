@@ -1,38 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ContactModel {
   ContactModel({
-    required this.idContact,
+    required this.id,
     required this.idChatRoom,
-    this.name,
-    this.photoUrl,
-    this.lastMessage,
-    this.lastMessageTime,
+    required this.name,
+    required this.photoUrl,
   });
-  late String idContact;
-  late String idChatRoom;
-  late String? name;
-  late String? lastMessage;
-  late String? photoUrl;
-  late Timestamp? lastMessageTime;
+  late String? idChatRoom;
+  final String id, name;
+  final String? photoUrl;
 
-  ContactModel.fromJson(Map<String, dynamic> json) {
-    idContact = json['idContact'];
-    name = json['name'];
-    idChatRoom = json['idChatRoom'];
-    photoUrl = json['photoUrl'];
-    lastMessage = json['lastMessage'];
-    lastMessageTime = json['lastMessageTime'];
-  }
+  ContactModel.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        idChatRoom = json['idChatRoom'],
+        photoUrl = json['photoUrl'];
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['idContact'] = idContact;
-    data['name'] = name;
-    data['idChatRoom'] = idChatRoom;
-    data['photoUrl'] = photoUrl;
-    data['lastMessage'] = lastMessage;
-    data['lastMessageTime'] = lastMessageTime;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'idChatRoom': idChatRoom,
+        'photoUrl': photoUrl,
+      };
 }

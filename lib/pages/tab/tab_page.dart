@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:socialize/pages/tab_pages/components/appbar_custom.dart';
-import 'package:socialize/pages/tab_pages/home_page.dart';
-import 'package:socialize/pages/tab_pages/new_talk.dart';
+import 'package:socialize/pages/home/home_page.dart';
+import 'package:socialize/pages/new_contact/new_contacts_page.dart';
+import 'package:socialize/pages/tab/components/appbar_custom.dart';
 
 class TabPage extends StatefulWidget {
   const TabPage({super.key});
@@ -25,7 +25,7 @@ class _TabPageState extends State<TabPage> {
         body: TabBarView(
           children: [
             HomePage(),
-            NewTalkPage(),
+            NewContactsPage(),
           ],
         ),
       ),

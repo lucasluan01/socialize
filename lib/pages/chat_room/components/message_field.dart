@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:socialize/stores/chat_store.dart';
+import 'package:socialize/stores/chat_rooms_store.dart';
 
-class MessageFieldCustom extends StatefulWidget {
-  const MessageFieldCustom({super.key});
+class MessageField extends StatefulWidget {
+  const MessageField({super.key});
 
   @override
-  State<MessageFieldCustom> createState() => _MessageFieldCustomState();
+  State<MessageField> createState() => _MessageFieldCustomState();
 }
 
-class _MessageFieldCustomState extends State<MessageFieldCustom> {
-  final chatStore = GetIt.instance<ChatStore>();
+class _MessageFieldCustomState extends State<MessageField> {
+  final _chatRoomsStore = GetIt.instance<ChatRoomsStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _MessageFieldCustomState extends State<MessageFieldCustom> {
           children: [
             Expanded(
               child: TextFormField(
-                controller: chatStore.messageController,
+                controller: _chatRoomsStore.messageController,
                 decoration: InputDecoration(
                   hintText: "Mensagem",
                   filled: true,
@@ -40,13 +40,13 @@ class _MessageFieldCustomState extends State<MessageFieldCustom> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onChanged: (value) => chatStore.setMessage(value),
+                onChanged: (value) => _chatRoomsStore.setMessage(value),
                 keyboardType: TextInputType.multiline,
                 minLines: 1,
                 maxLines: 8,
               ),
             ),
-            if (chatStore.message.isNotEmpty) ...[
+            if (_chatRoomsStore.message.isNotEmpty) ...[
               const SizedBox(
                 width: 8,
               ),
@@ -58,7 +58,7 @@ class _MessageFieldCustomState extends State<MessageFieldCustom> {
                 child: IconButton(
                   padding: const EdgeInsets.all(0),
                   onPressed: () async {
-                    chatStore.pressedSendMessage();
+                    _chatRoomsStore.pressedSendMessage();
                   },
                   icon: const Icon(
                     Icons.send,

@@ -1,17 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:socialize/auth/auth_service.dart';
-import 'package:socialize/exceptions.dart';
-import 'package:socialize/models/contact.dart';
 import 'package:socialize/models/user.dart';
-import 'package:socialize/repositories/user_repository.dart';
+import 'package:socialize/services/user_service.dart';
 
 part 'user_store.g.dart';
 
@@ -19,82 +14,49 @@ part 'user_store.g.dart';
 class UserStore = _UserStoreBase with _$UserStore;
 
 abstract class _UserStoreBase with Store {
-  final authService = GetIt.instance<AuthService>();
-  final userRepository = UserRepository();
-
-  @observable
-  List<QueryDocumentSnapshot>? userDocument;
+  final _userService = UserService();
+  final _authService = GetIt.instance<AuthService>();
 
   @observable
   UserModel? user;
 
   @observable
-  List<Map<String, dynamic>>? contacts;
+  String? nameField, emailField, stateField, genderField, email;
 
   @observable
-  bool showErrors = false, loadingConversation = true;
+  bool showErrors = false;
 
   @observable
-  String? name, email, photoUrl, state, gender;
-
-  @observable
-  File? photoFile;
+  dynamic photoUrlField;
 
   @action
-  void setName(String? value) => name = value;
+  void setFieldName(String? value) => nameField = value?.trim();
 
   @action
-  void setEmail(String? value) => email = value;
+  void setFieldEmail(String? value) => emailField = value;
 
   @action
-  void setPhotoUrl(String? value) => photoUrl = value;
+  void setFieldPhotoUrl(dynamic value) => photoUrlField = value;
 
   @action
-  void setState(String? value) => state = value;
+  void setFieldState(String? value) => stateField = value;
 
   @action
-  void setGender(String? value) => gender = value;
-
-  @action
-  void setUser(UserModel? value) {
-    user = value;
-    name = value?.name;
-    email = value?.email;
-    photoUrl = value?.photoUrl;
-    state = value?.state;
-    gender = value?.gender;
-    contacts = value?.contacts?.map((e) => e.toJson()).toList() ??
-        <Map<String, dynamic>>[];
-  }
-
-  String? getphotoUrl() => photoUrl;
-
-  File? getPhotoFile() => photoFile;
-
-  @computed
-  String get nameInitials {
-    if (name != null && name!.isNotEmpty) {
-      final nameSplit = name!.trim().split(' ');
-      if (nameSplit.length == 1) {
-        return nameSplit[0].substring(0, 1).toUpperCase();
-      }
-      return nameSplit[0].substring(0, 1).toUpperCase() +
-          nameSplit[1].substring(0, 1).toUpperCase();
-    }
-    return "?";
-  }
+  void setFieldGender(String? value) => genderField = value;
 
   @computed
   bool get isFormValid =>
-      nameError == null && stateError == null && genderError == null;
+      nameFieldError == null &&
+      stateFieldError == null &&
+      genderFieldError == null;
 
   @computed
-  String? get nameError {
+  String? get nameFieldError {
     if (showErrors) {
-      if (name == null || name!.isEmpty) {
+      if (nameField == null || nameField!.isEmpty) {
         return 'Nome é obrigatório';
       }
-      if (name!.length < 2) {
+      if (nameField!.length < 2) {
         return 'Nome deve ter pelo menos 2 caracteres';
       }
     }
@@ -102,75 +64,33 @@ abstract class _UserStoreBase with Store {
   }
 
   @computed
-  String? get stateError {
-    if (showErrors && (state == null || state!.isEmpty)) {
+  String? get stateFieldError {
+    if (showErrors && (stateField == null || stateField!.isEmpty)) {
       return 'Selecione um estado';
     }
     return null;
   }
 
   @computed
-  String? get genderError {
-    if (showErrors && (gender == null || gender!.isEmpty)) {
+  String? get genderFieldError {
+    if (showErrors && (genderField == null || genderField!.isEmpty)) {
       return 'Selecione um gênero';
     }
     return null;
   }
 
   @action
-  Future<void> loadCurrentUserData() async {
-    final user = await userRepository.getUserDocument();
-
-    setEmail(authService.currentUser!.email);
-
-    if (user != null) {
-      user['contacts'] = contacts;
-      setUser(UserModel.fromJson(user));
-    }
-  }
-
-  Future<void> setUserData() async {
-    setUser(UserModel(
-      id: authService.currentUser!.uid,
-      name: name!,
-      state: state!,
-      email: email!,
-      gender: gender!,
-      photoUrl: photoUrl,
-      contacts: user?.contacts ?? <ContactModel>[],
-    ));
-
-    try {
-      await UserRepository().setUser(user!.toJson());
-    } catch (e) {
-      inspect(e);
-    }
-  }
-
-  Future<void> updatePhoto() async {
-    if (photoFile != null) {
-      try {
-        final url = await UserRepository().uploadAvatar(photoFile!);
-        setPhotoUrl(url);
-      } catch (e) {
-        final errorMessage = getFirebaseExceptionMessage(e);
-        Fluttertoast.showToast(
-          backgroundColor: Colors.red,
-          msg: errorMessage,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-        );
+  Future<void> getUser() async {
+    await _userService.getUser(_authService.currentUser!.uid).then((snapshot) {
+      if (snapshot.data() != null) {
+        user = UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
+        user!.id = _authService.currentUser!.uid;
+        setFields();
+      } else {
+        user = null;
       }
-    }
-  }
-
-  @action
-  Future<void> pressedSave() async {
-    showErrors = true;
-    if (isFormValid) {
-      await updatePhoto();
-      await setUserData();
-    }
+    });
+    email = _authService.currentUser?.email;
   }
 
   @action
@@ -183,57 +103,73 @@ abstract class _UserStoreBase with Store {
       } else if (resource == "camera") {
         xFile = await picker.pickImage(source: ImageSource.camera);
       } else {
-        photoUrl = null;
-        photoFile = null;
+        photoUrlField = null;
       }
 
       if (xFile != null) {
-        photoFile = File(xFile.path);
+        photoUrlField = File(xFile.path);
       }
     } catch (e) {
+      // TODO: verifir erros e remover o log
       inspect(e);
     }
   }
 
   @action
-  void listenToUserContacts() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(authService.currentUser!.uid)
-        .collection("contacts")
-        .where(FieldPath.documentId, isNotEqualTo: 'empty')
-        .snapshots()
-        .listen((snapshot) async {
-      loadingConversation = true;
-      contacts = snapshot.docs.map((e) => e.data()).toList();
-      await userRepository.getConversationResume();
-      listenToConversationSummary();
-      user!.contacts = contacts!.map((e) => ContactModel.fromJson(e)).toList();
-      loadingConversation = false;
-    });
+  Future<void> pressedSave() async {
+    showErrors = true;
+
+    if (isFormValid) {
+      photoUrlField is File
+          ? photoUrlField = await _userService.uploadAvatar(
+              _authService.currentUser!.uid, photoUrlField)
+          : null;
+      setUser();
+    }
   }
 
   @action
-  void listenToConversationSummary() {
-    FirebaseFirestore.instance
-        .collection('chat_rooms')
-        .where(FieldPath.documentId,
-            whereIn: user!.contacts!.map((e) => e.idChatRoom).toList())
-        .snapshots()
-        .listen((snapshot) {
-      for (var element in contacts!) {
-        final chatRoom =
-            snapshot.docs.firstWhere((e) => e.id == element['idChatRoom']);
-        element['lastMessage'] = chatRoom.get('lastMessage');
-        element['lastMessageTime'] = chatRoom.get('lastMessageTime');
-      }
-      user!.contacts = contacts!.map((e) => ContactModel.fromJson(e)).toList();
-    });
+  Future<void> setUserData() async {
+    user = UserModel(
+      id: _authService.currentUser!.uid,
+      name: nameField!,
+      state: stateField!,
+      gender: genderField!,
+      photoUrl: photoUrlField,
+    );
   }
 
-  @action
-  void dispose() {
-    photoFile = null;
-    showErrors = false;
+  void setFields() {
+    nameField = user?.name;
+    photoUrlField = user?.photoUrl;
+    stateField = user?.state;
+    genderField = user?.gender;
   }
+
+  // TODO: Implementar no futuro?
+  // Stream<List<UserModel>> getUsersStream() {
+  //   return _userService.getUsersStream().map((querySnapshot) => querySnapshot
+  //       .docs
+  //       .map((doc) => UserModel.fromJson(doc as Map<String, dynamic>))
+  //       .toList());
+  // }
+
+  Future<void> setUser() async {
+    await _userService
+        .setUser(
+            _authService.currentUser!.uid,
+            UserModel.fromJson({
+              'id': _authService.currentUser!.uid,
+              'name': nameField,
+              'photoUrl': photoUrlField,
+              'gender': genderField,
+              'state': stateField,
+            }))
+        .then((value) => setUserData());
+  }
+
+  // TODO: Implement deleteUser no futuro
+  // Future<void> deleteUser(UserModel user) async {
+  //   await _userService.deleteUser();
+  // }
 }

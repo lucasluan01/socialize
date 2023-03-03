@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/dropdown_custom.dart';
-import 'package:socialize/pages/tab_pages/components/new_contact_custom.dart';
-import 'package:socialize/stores/talks_store.dart';
+import 'package:socialize/components/new_contact_box.dart';
+import 'package:socialize/stores/contact_store.dart';
 
-class NewTalkPage extends StatefulWidget {
-  const NewTalkPage({super.key});
+class NewContactsPage extends StatefulWidget {
+  const NewContactsPage({super.key});
 
   @override
-  State<NewTalkPage> createState() => _NewTalkPageState();
+  State<NewContactsPage> createState() => _NewContactsPageState();
 }
 
-class _NewTalkPageState extends State<NewTalkPage> {
-  final talksStore = GetIt.instance<TalksStore>();
+class _NewContactsPageState extends State<NewContactsPage> {
+  final contactStore = GetIt.instance<ContactStore>();
 
   @override
   void initState() {
     super.initState();
-
-    talksStore.getNewTalks();
+    contactStore.setSearchState(contactStore.userStore.user!.state);
+    contactStore.searchNewContacts();
   }
 
   @override
@@ -32,21 +32,17 @@ class _NewTalkPageState extends State<NewTalkPage> {
             return DropdownCustom(
               dropdownType: "Estado",
               labelText: "Estado",
-              initialValue: talksStore.searchState,
-              messageError: talksStore.searchStateError,
-              onChanged: talksStore.setSearchState,
+              initialValue: contactStore.userStore.user!.state,
+              messageError: contactStore.searchStateError,
+              onChanged: contactStore.setSearchState,
             );
           }),
           const SizedBox(height: 16),
           Observer(builder: (_) {
             return Column(
               mainAxisSize: MainAxisSize.min,
-              children: talksStore.newsTalks!
-                  .map((e) => NewContactCustom(
-                        name: e.name,
-                        photoUrl: e.photoUrl,
-                        id: e.id,
-                      ))
+              children: contactStore.listNewContacts!
+                  .map((e) => ContactBox(contact: e))
                   .toList(),
             );
           }),

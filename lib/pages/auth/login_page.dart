@@ -5,16 +5,25 @@ import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
 import 'package:socialize/stores/user_store.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final authService = GetIt.instance<AuthService>();
+  final userStore = GetIt.instance<UserStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.signOut();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final authService = GetIt.instance<AuthService>();
-    final userStore = GetIt.instance<UserStore>();
-
-    // userStore.dispose();
-
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -33,16 +42,14 @@ class LoginPage extends StatelessWidget {
                     await authService.signInwithGoogle();
 
                     if (authService.currentUser != null) {
-                      await userStore.loadCurrentUserData();
-
-                      if (userStore.user != null) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, '/profile');
-                      }
+                      await userStore.getUser().then((_) {
+                        if (userStore.user != null) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (route) => false);
+                        } else {
+                          Navigator.pushNamed(context, '/profile');
+                        }
+                      });
                     }
                   },
                   child: Row(

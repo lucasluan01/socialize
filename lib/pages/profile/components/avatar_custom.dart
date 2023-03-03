@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:socialize/components/circle_avatar_custom.dart';
 import 'package:socialize/stores/user_store.dart';
 
 class CircleAvatarCustom extends StatefulWidget {
@@ -18,10 +19,10 @@ class _CircleAvatarCustomState extends State<CircleAvatarCustom> {
     return Center(
       child: GestureDetector(
         onTap: () => pressedAvatar(),
-        child: Observer(builder: (context) {
+        child: Observer(builder: (_) {
           return Stack(
             children: [
-              avatar(),
+              avatar(context: context, photo: userStore.photoUrlField, radius: 60),
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -54,39 +55,6 @@ class _CircleAvatarCustomState extends State<CircleAvatarCustom> {
             ],
           );
         }),
-      ),
-    );
-  }
-
-  CircleAvatar avatar() {
-    if (userStore.photoFile != null) {
-      return CircleAvatar(
-        radius: 60,
-        backgroundImage: FileImage(userStore.photoFile!),
-      );
-    }
-
-    if (userStore.photoUrl != null) {
-      return CircleAvatar(
-        radius: 60,
-        backgroundImage: NetworkImage(userStore.photoUrl!),
-      );
-    }
-
-    return CircleAvatar(
-      radius: 60,
-      child: Container(
-        height: 120,
-        width: 120,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
-          color: Theme.of(context).primaryColor,
-        ),
-        child: Text(
-          userStore.nameInitials,
-          style: const TextStyle(fontSize: 48),
-        ),
       ),
     );
   }

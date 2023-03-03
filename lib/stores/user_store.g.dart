@@ -9,13 +9,6 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserStore on _UserStoreBase, Store {
-  Computed<String>? _$nameInitialsComputed;
-
-  @override
-  String get nameInitials =>
-      (_$nameInitialsComputed ??= Computed<String>(() => super.nameInitials,
-              name: '_UserStoreBase.nameInitials'))
-          .value;
   Computed<bool>? _$isFormValidComputed;
 
   @override
@@ -23,43 +16,27 @@ mixin _$UserStore on _UserStoreBase, Store {
       (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
               name: '_UserStoreBase.isFormValid'))
           .value;
-  Computed<String?>? _$nameErrorComputed;
+  Computed<String?>? _$nameFieldErrorComputed;
 
   @override
-  String? get nameError =>
-      (_$nameErrorComputed ??= Computed<String?>(() => super.nameError,
-              name: '_UserStoreBase.nameError'))
-          .value;
-  Computed<String?>? _$stateErrorComputed;
+  String? get nameFieldError => (_$nameFieldErrorComputed ??= Computed<String?>(
+          () => super.nameFieldError,
+          name: '_UserStoreBase.nameFieldError'))
+      .value;
+  Computed<String?>? _$stateFieldErrorComputed;
 
   @override
-  String? get stateError =>
-      (_$stateErrorComputed ??= Computed<String?>(() => super.stateError,
-              name: '_UserStoreBase.stateError'))
-          .value;
-  Computed<String?>? _$genderErrorComputed;
+  String? get stateFieldError => (_$stateFieldErrorComputed ??=
+          Computed<String?>(() => super.stateFieldError,
+              name: '_UserStoreBase.stateFieldError'))
+      .value;
+  Computed<String?>? _$genderFieldErrorComputed;
 
   @override
-  String? get genderError =>
-      (_$genderErrorComputed ??= Computed<String?>(() => super.genderError,
-              name: '_UserStoreBase.genderError'))
-          .value;
-
-  late final _$userDocumentAtom =
-      Atom(name: '_UserStoreBase.userDocument', context: context);
-
-  @override
-  List<QueryDocumentSnapshot<Object?>>? get userDocument {
-    _$userDocumentAtom.reportRead();
-    return super.userDocument;
-  }
-
-  @override
-  set userDocument(List<QueryDocumentSnapshot<Object?>>? value) {
-    _$userDocumentAtom.reportWrite(value, super.userDocument, () {
-      super.userDocument = value;
-    });
-  }
+  String? get genderFieldError => (_$genderFieldErrorComputed ??=
+          Computed<String?>(() => super.genderFieldError,
+              name: '_UserStoreBase.genderFieldError'))
+      .value;
 
   late final _$userAtom = Atom(name: '_UserStoreBase.user', context: context);
 
@@ -76,19 +53,82 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
-  late final _$contactsAtom =
-      Atom(name: '_UserStoreBase.contacts', context: context);
+  late final _$nameFieldAtom =
+      Atom(name: '_UserStoreBase.nameField', context: context);
 
   @override
-  List<Map<String, dynamic>>? get contacts {
-    _$contactsAtom.reportRead();
-    return super.contacts;
+  String? get nameField {
+    _$nameFieldAtom.reportRead();
+    return super.nameField;
   }
 
   @override
-  set contacts(List<Map<String, dynamic>>? value) {
-    _$contactsAtom.reportWrite(value, super.contacts, () {
-      super.contacts = value;
+  set nameField(String? value) {
+    _$nameFieldAtom.reportWrite(value, super.nameField, () {
+      super.nameField = value;
+    });
+  }
+
+  late final _$emailFieldAtom =
+      Atom(name: '_UserStoreBase.emailField', context: context);
+
+  @override
+  String? get emailField {
+    _$emailFieldAtom.reportRead();
+    return super.emailField;
+  }
+
+  @override
+  set emailField(String? value) {
+    _$emailFieldAtom.reportWrite(value, super.emailField, () {
+      super.emailField = value;
+    });
+  }
+
+  late final _$stateFieldAtom =
+      Atom(name: '_UserStoreBase.stateField', context: context);
+
+  @override
+  String? get stateField {
+    _$stateFieldAtom.reportRead();
+    return super.stateField;
+  }
+
+  @override
+  set stateField(String? value) {
+    _$stateFieldAtom.reportWrite(value, super.stateField, () {
+      super.stateField = value;
+    });
+  }
+
+  late final _$genderFieldAtom =
+      Atom(name: '_UserStoreBase.genderField', context: context);
+
+  @override
+  String? get genderField {
+    _$genderFieldAtom.reportRead();
+    return super.genderField;
+  }
+
+  @override
+  set genderField(String? value) {
+    _$genderFieldAtom.reportWrite(value, super.genderField, () {
+      super.genderField = value;
+    });
+  }
+
+  late final _$emailAtom = Atom(name: '_UserStoreBase.email', context: context);
+
+  @override
+  String? get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String? value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
     });
   }
 
@@ -108,130 +148,28 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
-  late final _$loadingConversationAtom =
-      Atom(name: '_UserStoreBase.loadingConversation', context: context);
+  late final _$photoUrlFieldAtom =
+      Atom(name: '_UserStoreBase.photoUrlField', context: context);
 
   @override
-  bool get loadingConversation {
-    _$loadingConversationAtom.reportRead();
-    return super.loadingConversation;
+  dynamic get photoUrlField {
+    _$photoUrlFieldAtom.reportRead();
+    return super.photoUrlField;
   }
 
   @override
-  set loadingConversation(bool value) {
-    _$loadingConversationAtom.reportWrite(value, super.loadingConversation, () {
-      super.loadingConversation = value;
+  set photoUrlField(dynamic value) {
+    _$photoUrlFieldAtom.reportWrite(value, super.photoUrlField, () {
+      super.photoUrlField = value;
     });
   }
 
-  late final _$nameAtom = Atom(name: '_UserStoreBase.name', context: context);
+  late final _$getUserAsyncAction =
+      AsyncAction('_UserStoreBase.getUser', context: context);
 
   @override
-  String? get name {
-    _$nameAtom.reportRead();
-    return super.name;
-  }
-
-  @override
-  set name(String? value) {
-    _$nameAtom.reportWrite(value, super.name, () {
-      super.name = value;
-    });
-  }
-
-  late final _$emailAtom = Atom(name: '_UserStoreBase.email', context: context);
-
-  @override
-  String? get email {
-    _$emailAtom.reportRead();
-    return super.email;
-  }
-
-  @override
-  set email(String? value) {
-    _$emailAtom.reportWrite(value, super.email, () {
-      super.email = value;
-    });
-  }
-
-  late final _$photoUrlAtom =
-      Atom(name: '_UserStoreBase.photoUrl', context: context);
-
-  @override
-  String? get photoUrl {
-    _$photoUrlAtom.reportRead();
-    return super.photoUrl;
-  }
-
-  @override
-  set photoUrl(String? value) {
-    _$photoUrlAtom.reportWrite(value, super.photoUrl, () {
-      super.photoUrl = value;
-    });
-  }
-
-  late final _$stateAtom = Atom(name: '_UserStoreBase.state', context: context);
-
-  @override
-  String? get state {
-    _$stateAtom.reportRead();
-    return super.state;
-  }
-
-  @override
-  set state(String? value) {
-    _$stateAtom.reportWrite(value, super.state, () {
-      super.state = value;
-    });
-  }
-
-  late final _$genderAtom =
-      Atom(name: '_UserStoreBase.gender', context: context);
-
-  @override
-  String? get gender {
-    _$genderAtom.reportRead();
-    return super.gender;
-  }
-
-  @override
-  set gender(String? value) {
-    _$genderAtom.reportWrite(value, super.gender, () {
-      super.gender = value;
-    });
-  }
-
-  late final _$photoFileAtom =
-      Atom(name: '_UserStoreBase.photoFile', context: context);
-
-  @override
-  File? get photoFile {
-    _$photoFileAtom.reportRead();
-    return super.photoFile;
-  }
-
-  @override
-  set photoFile(File? value) {
-    _$photoFileAtom.reportWrite(value, super.photoFile, () {
-      super.photoFile = value;
-    });
-  }
-
-  late final _$loadCurrentUserDataAsyncAction =
-      AsyncAction('_UserStoreBase.loadCurrentUserData', context: context);
-
-  @override
-  Future<void> loadCurrentUserData() {
-    return _$loadCurrentUserDataAsyncAction
-        .run(() => super.loadCurrentUserData());
-  }
-
-  late final _$pressedSaveAsyncAction =
-      AsyncAction('_UserStoreBase.pressedSave', context: context);
-
-  @override
-  Future<void> pressedSave() {
-    return _$pressedSaveAsyncAction.run(() => super.pressedSave());
+  Future<void> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
   }
 
   late final _$selectImageAsyncAction =
@@ -242,103 +180,75 @@ mixin _$UserStore on _UserStoreBase, Store {
     return _$selectImageAsyncAction.run(() => super.selectImage(resource));
   }
 
+  late final _$pressedSaveAsyncAction =
+      AsyncAction('_UserStoreBase.pressedSave', context: context);
+
+  @override
+  Future<void> pressedSave() {
+    return _$pressedSaveAsyncAction.run(() => super.pressedSave());
+  }
+
+  late final _$setUserDataAsyncAction =
+      AsyncAction('_UserStoreBase.setUserData', context: context);
+
+  @override
+  Future<void> setUserData() {
+    return _$setUserDataAsyncAction.run(() => super.setUserData());
+  }
+
   late final _$_UserStoreBaseActionController =
       ActionController(name: '_UserStoreBase', context: context);
 
   @override
-  void setName(String? value) {
+  void setFieldName(String? value) {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setName');
+        name: '_UserStoreBase.setFieldName');
     try {
-      return super.setName(value);
+      return super.setFieldName(value);
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setEmail(String? value) {
+  void setFieldEmail(String? value) {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setEmail');
+        name: '_UserStoreBase.setFieldEmail');
     try {
-      return super.setEmail(value);
+      return super.setFieldEmail(value);
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setPhotoUrl(String? value) {
+  void setFieldPhotoUrl(dynamic value) {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setPhotoUrl');
+        name: '_UserStoreBase.setFieldPhotoUrl');
     try {
-      return super.setPhotoUrl(value);
+      return super.setFieldPhotoUrl(value);
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setState(String? value) {
+  void setFieldState(String? value) {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setState');
+        name: '_UserStoreBase.setFieldState');
     try {
-      return super.setState(value);
+      return super.setFieldState(value);
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setGender(String? value) {
+  void setFieldGender(String? value) {
     final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setGender');
+        name: '_UserStoreBase.setFieldGender');
     try {
-      return super.setGender(value);
-    } finally {
-      _$_UserStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setUser(UserModel? value) {
-    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.setUser');
-    try {
-      return super.setUser(value);
-    } finally {
-      _$_UserStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void listenToUserContacts() {
-    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.listenToUserContacts');
-    try {
-      return super.listenToUserContacts();
-    } finally {
-      _$_UserStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void listenToConversationSummary() {
-    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.listenToConversationSummary');
-    try {
-      return super.listenToConversationSummary();
-    } finally {
-      _$_UserStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void dispose() {
-    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
-        name: '_UserStoreBase.dispose');
-    try {
-      return super.dispose();
+      return super.setFieldGender(value);
     } finally {
       _$_UserStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -347,22 +257,18 @@ mixin _$UserStore on _UserStoreBase, Store {
   @override
   String toString() {
     return '''
-userDocument: ${userDocument},
 user: ${user},
-contacts: ${contacts},
-showErrors: ${showErrors},
-loadingConversation: ${loadingConversation},
-name: ${name},
+nameField: ${nameField},
+emailField: ${emailField},
+stateField: ${stateField},
+genderField: ${genderField},
 email: ${email},
-photoUrl: ${photoUrl},
-state: ${state},
-gender: ${gender},
-photoFile: ${photoFile},
-nameInitials: ${nameInitials},
+showErrors: ${showErrors},
+photoUrlField: ${photoUrlField},
 isFormValid: ${isFormValid},
-nameError: ${nameError},
-stateError: ${stateError},
-genderError: ${genderError}
+nameFieldError: ${nameFieldError},
+stateFieldError: ${stateFieldError},
+genderFieldError: ${genderFieldError}
     ''';
   }
 }

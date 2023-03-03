@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:socialize/auth/auth_service.dart';
-import 'package:socialize/models/message.dart';
+import 'package:socialize/models/message_model.dart';
 
-class MessageBoxCustom extends StatelessWidget {
-  const MessageBoxCustom({
+class MessageBox extends StatelessWidget {
+  const MessageBox({
     required this.message,
     super.key,
   });
@@ -15,7 +15,7 @@ class MessageBoxCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
-    bool isCurrentUser = authService.currentUser!.uid == message.idSender;
+    bool isCurrentUser = authService.currentUser!.uid == message.senderID;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -51,8 +51,10 @@ class MessageBoxCustom extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          DateFormat("HH:mm").format(DateTime.fromMicrosecondsSinceEpoch(
-              message.shippingDate.microsecondsSinceEpoch)),
+          DateFormat("HH:mm").format(
+            DateTime.fromMicrosecondsSinceEpoch(
+                message.sendedAt.microsecondsSinceEpoch),
+          ),
           style: const TextStyle(
             fontSize: 12,
             color: Colors.black,

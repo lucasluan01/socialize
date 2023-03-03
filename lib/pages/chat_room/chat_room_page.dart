@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:socialize/pages/chat/components/message_box_custom.dart';
-import 'package:socialize/pages/chat/components/message_field_custom.dart';
-import 'package:socialize/stores/chat_store.dart';
-import 'package:socialize/models/message.dart';
+import 'package:socialize/pages/chat_room/components/message_box.dart';
+import 'package:socialize/pages/chat_room/components/message_field.dart';
+import 'package:socialize/stores/chat_rooms_store.dart';
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+class ChatRoomPage extends StatefulWidget {
+  const ChatRoomPage({super.key});
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatRoomPage> createState() => _ChatRoomPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  final chatStore = GetIt.instance<ChatStore>();
+class _ChatRoomPageState extends State<ChatRoomPage> {
+  final _chatRoomsStore = GetIt.instance<ChatRoomsStore>();
 
   @override
   void initState() {
     super.initState();
-    chatStore.listenToChatMessages();
+    _chatRoomsStore.getMessagesStream();
   }
 
   @override
@@ -42,19 +41,15 @@ class _ChatPageState extends State<ChatPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                   reverse: true,
-                  separatorBuilder: (_, index) => const SizedBox(height: 16),
-                  itemCount: chatStore.messages.length,
+                  separatorBuilder: (_, index) => const SizedBox(height: 8),
+                  itemCount: _chatRoomsStore.messages.length,
                   itemBuilder: (_, index) {
-                    final message = MessageModel.fromJson(
-                        chatStore.messages[index].data()
-                            as Map<String, dynamic>);
-
-                    return MessageBoxCustom(message: message);
+                    return MessageBox(message: _chatRoomsStore.messages[index]);
                   },
                 ),
               ),
             ),
-            const MessageFieldCustom(),
+            const MessageField(),
           ],
         ),
       ),

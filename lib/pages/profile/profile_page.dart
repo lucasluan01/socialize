@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/dropdown_custom.dart';
-import 'package:socialize/pages/profile/components/circle_avatar_custom.dart';
+import 'package:socialize/pages/profile/components/avatar_custom.dart';
 import 'package:socialize/stores/user_store.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,9 +16,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final userStore = GetIt.instance<UserStore>();
 
   @override
-  void dispose() {
-    super.dispose();
-    userStore.dispose();
+  void initState() {
+    super.initState();
+    userStore.showErrors = false;
+    userStore.setFields();
   }
 
   @override
@@ -43,16 +44,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: 'Nome',
                           border: const OutlineInputBorder(),
-                          errorText: userStore.nameError,
-                          suffixIcon: userStore.nameError != null
+                          errorText: userStore.nameFieldError,
+                          suffixIcon: userStore.nameFieldError != null
                               ? const Icon(
                                   Icons.error,
                                   color: Colors.red,
                                 )
                               : null,
                         ),
-                        onChanged: (value) => userStore.setName(value),
-                        initialValue: userStore.name,
+                        onChanged: (value) => userStore.setFieldName(value),
+                        initialValue: userStore.nameField,
                       );
                     }),
                     const SizedBox(height: 16),
@@ -60,9 +61,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       return DropdownCustom(
                         dropdownType: "Estado",
                         labelText: "Estado",
-                        initialValue: userStore.state,
-                        messageError: userStore.stateError,
-                        onChanged: userStore.setState,
+                        initialValue: userStore.stateField,
+                        messageError: userStore.stateFieldError,
+                        onChanged: userStore.setFieldState,
                       );
                     }),
                     const SizedBox(height: 16),
@@ -70,9 +71,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       return DropdownCustom(
                         dropdownType: "Gênero",
                         labelText: "Gênero",
-                        initialValue: userStore.gender,
-                        messageError: userStore.genderError,
-                        onChanged: userStore.setGender,
+                        initialValue: userStore.genderField,
+                        messageError: userStore.genderFieldError,
+                        onChanged: userStore.setFieldGender,
                       );
                     }),
                     const SizedBox(height: 16),
@@ -91,18 +92,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: () async {
-                        await userStore.pressedSave();
-                        userStore.isFormValid
-                            // ignore: use_build_context_synchronously
-                            ? Navigator.pushNamedAndRemoveUntil(
-                                context, '/home', (route) => false)
-                            : null;
+                        await userStore.pressedSave().then((value) => {
+                              userStore.isFormValid
+                                  ? Navigator.pushNamedAndRemoveUntil(
+                                      context, '/home', (route) => false)
+                                  : null
+                            });
                       },
                       child: const Text('Salvar'),
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        if (userStore.user == null) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (route) => false);
+                        }
+                      },
                       child: const Text('Cancelar'),
                     ),
                   ],

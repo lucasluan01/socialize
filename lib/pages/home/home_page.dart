@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:socialize/auth/auth_service.dart';
-import 'package:socialize/pages/tab_pages/components/conversation_summary_custom.dart';
-import 'package:socialize/stores/user_store.dart';
+import 'package:socialize/components/new_contact_box.dart';
+import 'package:socialize/stores/chat_rooms_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,32 +12,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final userStore = GetIt.instance<UserStore>();
-  final authService = GetIt.instance<AuthService>();
+  final _chatRoomsStore = GetIt.I<ChatRoomsStore>();
 
   @override
   void initState() {
     super.initState();
-    userStore.listenToUserContacts();
+    _chatRoomsStore.getchatRoomsStream();
   }
 
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        if (userStore.loadingConversation) {
-          return const Center(child: CircularProgressIndicator());
-        }
         return ListView.separated(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           separatorBuilder: (_, index) => const SizedBox(height: 4),
           padding: const EdgeInsets.all(16.0),
-          itemCount: userStore.user!.contacts?.length ?? 0,
+          itemCount: _chatRoomsStore.currentUserConversations.length,
           itemBuilder: (_, index) {
-            final conversation = userStore.user!.contacts;
-            return ConversationSummaryCustom(
-              contact: conversation![index],
+            return ContactBox(
+              contact: _chatRoomsStore.currentUserConversations[index],
             );
           },
         );

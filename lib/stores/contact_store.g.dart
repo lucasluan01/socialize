@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'talks_store.dart';
+part of 'contact_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,17 +8,17 @@ part of 'talks_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$TalksStore on _TalksStoreBase, Store {
+mixin _$ContactStore on _ContactStoreBase, Store {
   Computed<String?>? _$searchStateErrorComputed;
 
   @override
   String? get searchStateError => (_$searchStateErrorComputed ??=
           Computed<String?>(() => super.searchStateError,
-              name: '_TalksStoreBase.searchStateError'))
+              name: '_ContactStoreBase.searchStateError'))
       .value;
 
   late final _$searchStateAtom =
-      Atom(name: '_TalksStoreBase.searchState', context: context);
+      Atom(name: '_ContactStoreBase.searchState', context: context);
 
   @override
   String? get searchState {
@@ -33,41 +33,41 @@ mixin _$TalksStore on _TalksStoreBase, Store {
     });
   }
 
-  late final _$newsTalksAtom =
-      Atom(name: '_TalksStoreBase.newsTalks', context: context);
+  late final _$listNewContactsAtom =
+      Atom(name: '_ContactStoreBase.listNewContacts', context: context);
 
   @override
-  List<UserModel>? get newsTalks {
-    _$newsTalksAtom.reportRead();
-    return super.newsTalks;
+  List<ContactModel>? get listNewContacts {
+    _$listNewContactsAtom.reportRead();
+    return super.listNewContacts;
   }
 
   @override
-  set newsTalks(List<UserModel>? value) {
-    _$newsTalksAtom.reportWrite(value, super.newsTalks, () {
-      super.newsTalks = value;
+  set listNewContacts(List<ContactModel>? value) {
+    _$listNewContactsAtom.reportWrite(value, super.listNewContacts, () {
+      super.listNewContacts = value;
     });
   }
 
-  late final _$getNewTalksAsyncAction =
-      AsyncAction('_TalksStoreBase.getNewTalks', context: context);
+  late final _$searchNewContactsAsyncAction =
+      AsyncAction('_ContactStoreBase.searchNewContacts', context: context);
 
   @override
-  Future<void> getNewTalks() {
-    return _$getNewTalksAsyncAction.run(() => super.getNewTalks());
+  Future<void> searchNewContacts() {
+    return _$searchNewContactsAsyncAction.run(() => super.searchNewContacts());
   }
 
-  late final _$_TalksStoreBaseActionController =
-      ActionController(name: '_TalksStoreBase', context: context);
+  late final _$_ContactStoreBaseActionController =
+      ActionController(name: '_ContactStoreBase', context: context);
 
   @override
   void setSearchState(String? value) {
-    final _$actionInfo = _$_TalksStoreBaseActionController.startAction(
-        name: '_TalksStoreBase.setSearchState');
+    final _$actionInfo = _$_ContactStoreBaseActionController.startAction(
+        name: '_ContactStoreBase.setSearchState');
     try {
       return super.setSearchState(value);
     } finally {
-      _$_TalksStoreBaseActionController.endAction(_$actionInfo);
+      _$_ContactStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
@@ -75,7 +75,7 @@ mixin _$TalksStore on _TalksStoreBase, Store {
   String toString() {
     return '''
 searchState: ${searchState},
-newsTalks: ${newsTalks},
+listNewContacts: ${listNewContacts},
 searchStateError: ${searchStateError}
     ''';
   }
