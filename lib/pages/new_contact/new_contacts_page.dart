@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/dropdown_custom.dart';
-import 'package:socialize/pages/new_contact/components/new_contact_box.dart';
+import 'package:socialize/components/new_contact_box.dart';
 import 'package:socialize/stores/contact_store.dart';
 
 class NewContactsPage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _NewContactsPageState extends State<NewContactsPage> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: contactStore.listNewContacts!
-                  .map((e) => NewContactBox(contact: e))
+                  .map((e) => ContactBox(contact: e))
                   .toList(),
             );
           }),

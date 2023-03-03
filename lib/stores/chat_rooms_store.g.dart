@@ -25,6 +25,40 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
     });
   }
 
+  late final _$currentUserConversationsAtom = Atom(
+      name: '_ChatRoomsStoreBase.currentUserConversations', context: context);
+
+  @override
+  List<ContactModel> get currentUserConversations {
+    _$currentUserConversationsAtom.reportRead();
+    return super.currentUserConversations;
+  }
+
+  @override
+  set currentUserConversations(List<ContactModel> value) {
+    _$currentUserConversationsAtom
+        .reportWrite(value, super.currentUserConversations, () {
+      super.currentUserConversations = value;
+    });
+  }
+
+  late final _$currentUserChatRoomsAtom =
+      Atom(name: '_ChatRoomsStoreBase.currentUserChatRooms', context: context);
+
+  @override
+  List<ChatRoomModel> get currentUserChatRooms {
+    _$currentUserChatRoomsAtom.reportRead();
+    return super.currentUserChatRooms;
+  }
+
+  @override
+  set currentUserChatRooms(List<ChatRoomModel> value) {
+    _$currentUserChatRoomsAtom.reportWrite(value, super.currentUserChatRooms,
+        () {
+      super.currentUserChatRooms = value;
+    });
+  }
+
   late final _$currentChatRoomIdAtom =
       Atom(name: '_ChatRoomsStoreBase.currentChatRoomId', context: context);
 
@@ -81,6 +115,14 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
     return _$loadChatRoomAsyncAction.run(() => super.loadChatRoom(contactID));
   }
 
+  late final _$loadContactsAsyncAction =
+      AsyncAction('_ChatRoomsStoreBase.loadContacts', context: context);
+
+  @override
+  Future<void> loadContacts() {
+    return _$loadContactsAsyncAction.run(() => super.loadContacts());
+  }
+
   late final _$createChatRoomAsyncAction =
       AsyncAction('_ChatRoomsStoreBase.createChatRoom', context: context);
 
@@ -116,6 +158,17 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
   }
 
   @override
+  void getchatRoomsStream() {
+    final _$actionInfo = _$_ChatRoomsStoreBaseActionController.startAction(
+        name: '_ChatRoomsStoreBase.getchatRoomsStream');
+    try {
+      return super.getchatRoomsStream();
+    } finally {
+      _$_ChatRoomsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void getMessagesStream() {
     final _$actionInfo = _$_ChatRoomsStoreBaseActionController.startAction(
         name: '_ChatRoomsStoreBase.getMessagesStream');
@@ -130,6 +183,8 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
   String toString() {
     return '''
 messages: ${messages},
+currentUserConversations: ${currentUserConversations},
+currentUserChatRooms: ${currentUserChatRooms},
 currentChatRoomId: ${currentChatRoomId},
 message: ${message},
 messageController: ${messageController}

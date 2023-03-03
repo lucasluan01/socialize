@@ -35,9 +35,12 @@ abstract class _ContactStoreBase with Store {
 
   @action
   Future<void> searchNewContacts() async {
-    await _contactService.getUsers(userStore.user!.id, searchState!).then(
-        (value) => listNewContacts = value.docs
-            .map((e) => ContactModel.fromJson(e.data() as Map<String, dynamic>))
-            .toList());
+    await _contactService
+        .getUsers(userStore.user!.id, searchState!)
+        .then((value) {
+      listNewContacts = value.docs
+          .map((e) => ContactModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 }

@@ -10,4 +10,11 @@ class ContactService {
         .where('state', isEqualTo: state)
         .where(FieldPath.documentId, whereNotIn: [currentUserId, 'empty']).get();
   }
+
+  Future<QuerySnapshot<Object?>> getCurrentUserContacts(List<String> contacts) {
+    return _contactRepository
+        .getUsers()
+        .where(FieldPath.documentId, whereIn: contacts)
+        .get();
+  }
 }

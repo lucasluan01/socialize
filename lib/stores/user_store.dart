@@ -146,7 +146,7 @@ abstract class _UserStoreBase with Store {
     genderField = user?.gender;
   }
 
-  // TODO: Implementar no futuro
+  // TODO: Implementar no futuro?
   // Stream<List<UserModel>> getUsersStream() {
   //   return _userService.getUsersStream().map((querySnapshot) => querySnapshot
   //       .docs

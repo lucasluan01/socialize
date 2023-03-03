@@ -9,7 +9,7 @@ class ChatRoomModel {
   late String? groupID;
 
   ChatRoomModel.fromJson(Map<String, dynamic> json)
-      : usersID = json['usersID'],
+      : usersID = json['usersID'].cast<String>(),
         type = json['type'],
         groupID = json['groupID'];
 

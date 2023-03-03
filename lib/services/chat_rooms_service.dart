@@ -8,12 +8,11 @@ import 'package:socialize/repositories/chat_rooms_repository.dart';
 class ChatRoomsService {
   final _chatRoomsRepository = ChatRoomsRepository();
 
-  // TODO: Implementar assim que a tela chat estiver pronta
-  // Stream<QuerySnapshot<Object?>> getchatRoomsStream(String currentUserId) {
-  //   return _chatRoomsRepository
-  //       .getChatRooms()
-  //       .where('users', whereIn: [currentUserId]).snapshots();
-  // }
+  Stream<QuerySnapshot<Object?>> getchatRoomsStream(String currentUserId) {
+    return _chatRoomsRepository
+        .getChatRooms()
+        .where('usersID', arrayContains: currentUserId).snapshots();
+  }
 
   Future<QuerySnapshot<Object?>> checkChatRoomExists(
       String currentUserId) async {

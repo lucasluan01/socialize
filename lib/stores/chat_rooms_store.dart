@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:socialize/models/chat_room.dart';
+import 'package:socialize/models/contact.dart';
 import 'package:socialize/models/message_model.dart';
 import 'package:socialize/services/chat_rooms_service.dart';
+import 'package:socialize/services/contact_service.dart';
 import 'package:socialize/stores/user_store.dart';
 
 part 'chat_rooms_store.g.dart';
@@ -14,10 +16,17 @@ class ChatRoomsStore = _ChatRoomsStoreBase with _$ChatRoomsStore;
 
 abstract class _ChatRoomsStoreBase with Store {
   final _chatRoomsService = ChatRoomsService();
+  final _contactService = ContactService();
   final _userStore = GetIt.I.get<UserStore>();
 
   @observable
   List<MessageModel> messages = [];
+
+  @observable
+  List<ContactModel> currentUserConversations = [];
+
+  @observable
+  List<ChatRoomModel> currentUserChatRooms = [];
 
   @observable
   String currentChatRoomId = '', message = '';
@@ -52,10 +61,38 @@ abstract class _ChatRoomsStoreBase with Store {
 
       if (chat.isNotEmpty) {
         currentChatRoomId = chat.first.id;
-      } else {
-        await createChatRoom(contactID);
       }
     });
+  }
+
+  @action
+  void getchatRoomsStream() {
+    _chatRoomsService
+        .getchatRoomsStream(_userStore.user!.id)
+        .listen((snapshot) async {
+      currentUserChatRooms = snapshot.docs
+          .map((e) => ChatRoomModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+
+      await loadContacts();
+    });
+  }
+
+  @action
+  Future<void> loadContacts() async {
+    List<String> idsContacts = currentUserChatRooms
+        .map((e) => e.usersID
+            .where((element) => element != _userStore.user!.id)
+            .toList()[0])
+        .toList();
+
+    if (idsContacts.isNotEmpty) {
+      await _contactService.getCurrentUserContacts(idsContacts).then((value) =>
+          currentUserConversations = value.docs
+              .map((e) =>
+                  ContactModel.fromJson(e.data() as Map<String, dynamic>))
+              .toList());
+    }
   }
 
   @action
