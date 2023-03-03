@@ -3,18 +3,27 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
+import 'package:socialize/stores/user_store.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final authService = GetIt.instance<AuthService>();
+  final userStore = GetIt.instance<UserStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.signOut();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final authService = GetIt.instance<AuthService>();
-
-    if (authService.currentUser != null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -31,19 +40,17 @@ class LoginPage extends StatelessWidget {
                 return OutlinedButton(
                   onPressed: () async {
                     await authService.signInwithGoogle();
-                    // TODO: falta resolver
-                    // if (authService.currentUser != null) {
-                    //   await userStore.loadCurrentUserData();
 
-                    //   if (userStore.user != null) {
-                    //     // ignore: use_build_context_synchronously
-                    //     Navigator.pushNamedAndRemoveUntil(
-                    //         context, '/home', (route) => false);
-                    //   } else {
-                    //     // ignore: use_build_context_synchronously
-                    //     Navigator.pushNamed(context, '/profile');
-                    //   }
-                    // }
+                    if (authService.currentUser != null) {
+                      await userStore.getUser().then((_) {
+                        if (userStore.user != null) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (route) => false);
+                        } else {
+                          Navigator.pushNamed(context, '/profile');
+                        }
+                      });
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

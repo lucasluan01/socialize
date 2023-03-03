@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
+import 'package:socialize/stores/user_store.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -11,11 +12,22 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = GetIt.instance<AuthService>();
-    Timer(const Duration(seconds: 1), () {
-      Navigator.pushNamed(
-        context,
-        authService.currentUser == null ? '/login' : '/home',
-      );
+    final userStore = GetIt.instance<UserStore>();
+
+    Timer(const Duration(seconds: 3), () async {
+      if (authService.currentUser != null) {
+        await userStore.getUser().then((_) {
+          if (userStore.user != null) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/profile', (route) => false);
+          }
+        });
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
     });
 
     return Scaffold(
