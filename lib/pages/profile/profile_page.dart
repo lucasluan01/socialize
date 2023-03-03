@@ -16,9 +16,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final userStore = GetIt.instance<UserStore>();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    userStore.showErrors = false;
     userStore.setFields();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -32,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // TODO: Implementar a imagem do usuário se ele tiver
                     const CircleAvatarCustom(),
                     const SizedBox(height: 32),
                     Observer(builder: (_) {

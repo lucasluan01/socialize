@@ -5,9 +5,9 @@ class UserRepository {
       FirebaseFirestore.instance.collection('users');
 
   // TODO: Implementar no futuro
-  // Stream<QuerySnapshot> getUsersStream() {
-  //   return _userCollectionReference.snapshots();
-  // }
+  CollectionReference<Object?> getUsers() {
+    return _userCollectionReference;
+  }
 
   Future<DocumentSnapshot<Object?>> getUser(String docID) {
     return _userCollectionReference.doc(docID).get();

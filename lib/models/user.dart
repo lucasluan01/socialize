@@ -4,9 +4,10 @@ class UserModel {
     required this.name,
     required this.gender,
     required this.state,
-    this.photoUrl,
+    required this.photoUrl,
   });
-  late String id, name, gender, state;
+  final String name, gender, state;
+  late String id;
   String? photoUrl;
 
   UserModel.fromJson(Map<String, dynamic> json)

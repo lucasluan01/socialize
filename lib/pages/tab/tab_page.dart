@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialize/pages/home/home_page.dart';
+import 'package:socialize/pages/new_contact/new_contacts_page.dart';
 import 'package:socialize/pages/tab/components/appbar_custom.dart';
 
 class TabPage extends StatefulWidget {
@@ -24,9 +25,7 @@ class _TabPageState extends State<TabPage> {
         body: TabBarView(
           children: [
             HomePage(),
-            Center(
-              child: Text('Chat Page'),
-            ),
+            NewContactsPage(),
           ],
         ),
       ),

@@ -9,19 +9,14 @@ import 'package:socialize/models/user.dart';
 import 'package:socialize/repositories/user_repository.dart';
 
 class UserService {
-  final _repository = UserRepository();
-
-  // TODO: Implementar no futuro
-  // Stream<QuerySnapshot> getUsersStream() {
-  //   return _repository.getUsersStream();
-  // }
+  final _userRepository = UserRepository();
 
   Future<DocumentSnapshot<Object?>> getUser(String docID) {
-    return _repository.getUser(docID);
+    return _userRepository.getUser(docID);
   }
 
   Future<void> setUser(String docID, UserModel user) async {
-    await _repository.setUser(docID, user.toJson());
+    await _userRepository.setUser(docID, user.toJson());
   }
 
   // TODO: Implementar no futuro

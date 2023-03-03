@@ -128,6 +128,17 @@ abstract class _UserStoreBase with Store {
     }
   }
 
+  @action
+  Future<void> setUserData() async {
+    user = UserModel(
+      id: _authService.currentUser!.uid,
+      name: nameField!,
+      state: stateField!,
+      gender: genderField!,
+      photoUrl: photoUrlField,
+    );
+  }
+
   void setFields() {
     nameField = user?.name;
     photoUrlField = user?.photoUrl;
@@ -154,17 +165,6 @@ abstract class _UserStoreBase with Store {
               'state': stateField,
             }))
         .then((value) => setUserData());
-  }
-
-  @action
-  Future<void> setUserData() async {
-    user = UserModel(
-      id: _authService.currentUser!.uid,
-      name: nameField!,
-      state: stateField!,
-      gender: genderField!,
-      photoUrl: photoUrlField,
-    );
   }
 
   // TODO: Implement deleteUser no futuro

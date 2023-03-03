@@ -14,7 +14,7 @@ class SplashPage extends StatelessWidget {
     final authService = GetIt.instance<AuthService>();
     final userStore = GetIt.instance<UserStore>();
 
-    Timer(const Duration(seconds: 3), () async {
+    Timer(const Duration(seconds: 1), () async {
       if (authService.currentUser != null) {
         await userStore.getUser().then((_) {
           if (userStore.user != null) {
