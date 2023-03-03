@@ -54,6 +54,8 @@ abstract class _ChatRoomsStoreBase with Store {
 
   @action
   Future<void> loadChatRoom(String contactID) async {
+    currentChatRoomId = '';
+
     await _chatRoomsService
         .checkChatRoomExists(_userStore.user!.id)
         .then((value) async {
