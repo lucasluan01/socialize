@@ -4,11 +4,10 @@ import 'package:socialize/repositories/contact_repository.dart';
 class ContactService {
   final _contactRepository = ContactRepository();
 
-  Future<QuerySnapshot<Object?>> getUsers(String docID, String state) {
+  Future<QuerySnapshot<Object?>> getUsers(String currentUserId, String state) {
     return _contactRepository
         .getUsers()
         .where('state', isEqualTo: state)
-        .where(FieldPath.documentId, isNotEqualTo: docID)
-        .get();
+        .where(FieldPath.documentId, whereNotIn: [currentUserId, 'empty']).get();
   }
 }

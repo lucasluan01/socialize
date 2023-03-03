@@ -9,12 +9,12 @@ class UserRepository {
     return _userCollectionReference;
   }
 
-  Future<DocumentSnapshot<Object?>> getUser(String docID) {
-    return _userCollectionReference.doc(docID).get();
+  Future<DocumentSnapshot<Object?>> getUser(String currentUserId) {
+    return _userCollectionReference.doc(currentUserId).get();
   }
 
-  Future<void> setUser(String docID, Map<String, dynamic> data) {
-    return _userCollectionReference.doc(docID).set(data);
+  Future<void> setUser(String currentUserId, Map<String, dynamic> data) {
+    return _userCollectionReference.doc(currentUserId).set(data);
   }
 
   // TODO: Implementar no futuro

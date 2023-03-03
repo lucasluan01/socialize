@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
 import 'package:socialize/routes.dart';
+import 'package:socialize/stores/chat_rooms_store.dart';
 import 'package:socialize/stores/contact_store.dart';
 import 'package:socialize/stores/user_store.dart';
 
@@ -29,6 +30,7 @@ void setupLocators() {
   GetIt.I.registerSingleton<AuthService>(AuthService());
   GetIt.I.registerSingleton<UserStore>(UserStore());
   GetIt.I.registerSingleton<ContactStore>(ContactStore());
+  GetIt.I.registerSingleton<ChatRoomsStore>(ChatRoomsStore());
 }
 
 class MyApp extends StatelessWidget {

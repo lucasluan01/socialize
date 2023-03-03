@@ -11,12 +11,12 @@ import 'package:socialize/repositories/user_repository.dart';
 class UserService {
   final _userRepository = UserRepository();
 
-  Future<DocumentSnapshot<Object?>> getUser(String docID) {
-    return _userRepository.getUser(docID);
+  Future<DocumentSnapshot<Object?>> getUser(String currentUserId) {
+    return _userRepository.getUser(currentUserId);
   }
 
-  Future<void> setUser(String docID, UserModel user) async {
-    await _userRepository.setUser(docID, user.toJson());
+  Future<void> setUser(String currentUserId, UserModel user) async {
+    await _userRepository.setUser(currentUserId, user.toJson());
   }
 
   // TODO: Implementar no futuro
@@ -26,9 +26,9 @@ class UserService {
   // }
 
   // TODO: Esse método tem que estar no service???
-  Future<String?> uploadAvatar(String userID, File photo) async {
+  Future<String?> uploadAvatar(String currentUserId, File photo) async {
     final storageRef = FirebaseStorage.instance.ref();
-    final imageRef = storageRef.child("$userID.jpg");
+    final imageRef = storageRef.child("$currentUserId.jpg");
 
     try {
       await imageRef.putFile(photo);

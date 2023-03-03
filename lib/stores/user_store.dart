@@ -159,6 +159,7 @@ abstract class _UserStoreBase with Store {
         .setUser(
             _authService.currentUser!.uid,
             UserModel.fromJson({
+              'id': _authService.currentUser!.uid,
               'name': nameField,
               'photoUrl': photoUrlField,
               'gender': genderField,

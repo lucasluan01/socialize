@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/circle_avatar_custom.dart';
 import 'package:socialize/models/contact.dart';
+import 'package:socialize/stores/chat_rooms_store.dart';
 
 class NewContactBox extends StatefulWidget {
   const NewContactBox({required this.contact, super.key});
@@ -13,6 +14,8 @@ class NewContactBox extends StatefulWidget {
 }
 
 class _NewContactBoxState extends State<NewContactBox> {
+  final _chatRoomsStore = GetIt.instance<ChatRoomsStore>();
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -33,18 +36,11 @@ class _NewContactBoxState extends State<NewContactBox> {
                 child: const Text('Cancelar'),
               ),
               TextButton(
-                onPressed: () async {
-                  // TODO: Criar nova conversa
-                  // final newChat = await talksStore.createNewRoom();
-                  // await talksStore.createNewContact(widget.id, newChat);
-
-                  // final chatStore = GetIt.instance<ChatStore>();
-                  // chatStore.setIdChat(newChat);
-
-                  // // ignore: use_build_context_synchronously
-                  // Navigator.pop(context);
-                  // // ignore: use_build_context_synchronously
-                  // Navigator.pushNamed(context, '/chat');
+                onPressed: () {
+                  _chatRoomsStore.loadChatRoom(widget.contact.id).then((value) {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/chat-room');
+                  });
                 },
                 child: const Text('Sim'),
               ),
