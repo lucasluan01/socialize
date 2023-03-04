@@ -45,17 +45,25 @@ abstract class _ChatRoomsStoreBase with Store {
 
   @action
   void pressedSendMessage() {
+    Map<String, dynamic> newMessage = {
+      'content': message,
+      'senderID': _userStore.user!.id,
+      'sendedAt': Timestamp.now(),
+    };
+
     if (message.isNotEmpty) {
       _chatRoomsService.sendMessage(
-          currentChatRoomId,
-          MessageModel.fromJson({
-            'content': message,
-            'senderID': _userStore.user!.id,
-            'sendedAt': Timestamp.now(),
-          }));
+          currentChatRoomId, MessageModel.fromJson(newMessage));
       message = '';
       messageController.clear();
+      reloadChatRooms(newMessage);
     }
+  }
+
+  void reloadChatRooms(Map<String, dynamic> newMessage) {
+    _chatRoomsService.reloadChatRooms(currentChatRoomId, {
+      'lastMessage': newMessage,
+    });
   }
 
   @action
@@ -100,6 +108,16 @@ abstract class _ChatRoomsStoreBase with Store {
               .map((e) =>
                   ContactModel.fromJson(e.data() as Map<String, dynamic>))
               .toList());
+
+      for (var contact in currentUserConversations) {
+        for (var chatRoom in currentUserChatRooms) {
+          if (chatRoom.usersID.contains(contact.id)) {
+            contact.lastMessage = chatRoom.lastMessage;
+          }
+        }
+      }
+      currentUserConversations.sort((a, b) =>
+          b.lastMessage?['sendedAt'].compareTo(a.lastMessage?['sendedAt']));
     }
   }
 
