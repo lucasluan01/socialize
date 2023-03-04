@@ -24,6 +24,7 @@ class _ContactBoxState extends State<ContactBox> {
           avatar(context: context, photo: widget.contact.photoUrl, radius: 20),
       title: Text(widget.contact.name),
       onTap: () async {
+        _chatRoomsStore.setSelectedContact(widget.contact);
         await _chatRoomsStore.loadChatRoom(widget.contact.id).then((value) {
           if (_chatRoomsStore.currentChatRoomId.isNotEmpty) {
             Navigator.pushNamed(context, '/chat-room');

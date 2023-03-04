@@ -34,6 +34,12 @@ abstract class _ChatRoomsStoreBase with Store {
   @observable
   TextEditingController messageController = TextEditingController();
 
+  @observable
+  ContactModel? selectedContact;
+
+  @action
+  void setSelectedContact(ContactModel value) => selectedContact = value;
+
   @action
   void setMessage(String value) => message = value.trim();
 
@@ -108,7 +114,7 @@ abstract class _ChatRoomsStoreBase with Store {
   }
 
   @action
-  void getMessagesStream() {
+  Future<void> getMessagesStream() async {
     _chatRoomsService.getMessagesStream(currentChatRoomId).listen((snapshot) {
       messages = snapshot.docs
           .map((e) => MessageModel.fromJson(e.data() as Map<String, dynamic>))

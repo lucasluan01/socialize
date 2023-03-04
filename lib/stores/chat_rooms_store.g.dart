@@ -107,6 +107,22 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
     });
   }
 
+  late final _$selectedContactAtom =
+      Atom(name: '_ChatRoomsStoreBase.selectedContact', context: context);
+
+  @override
+  ContactModel? get selectedContact {
+    _$selectedContactAtom.reportRead();
+    return super.selectedContact;
+  }
+
+  @override
+  set selectedContact(ContactModel? value) {
+    _$selectedContactAtom.reportWrite(value, super.selectedContact, () {
+      super.selectedContact = value;
+    });
+  }
+
   late final _$loadChatRoomAsyncAction =
       AsyncAction('_ChatRoomsStoreBase.loadChatRoom', context: context);
 
@@ -132,8 +148,27 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
         .run(() => super.createChatRoom(contactID));
   }
 
+  late final _$getMessagesStreamAsyncAction =
+      AsyncAction('_ChatRoomsStoreBase.getMessagesStream', context: context);
+
+  @override
+  Future<void> getMessagesStream() {
+    return _$getMessagesStreamAsyncAction.run(() => super.getMessagesStream());
+  }
+
   late final _$_ChatRoomsStoreBaseActionController =
       ActionController(name: '_ChatRoomsStoreBase', context: context);
+
+  @override
+  void setSelectedContact(ContactModel value) {
+    final _$actionInfo = _$_ChatRoomsStoreBaseActionController.startAction(
+        name: '_ChatRoomsStoreBase.setSelectedContact');
+    try {
+      return super.setSelectedContact(value);
+    } finally {
+      _$_ChatRoomsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setMessage(String value) {
@@ -169,17 +204,6 @@ mixin _$ChatRoomsStore on _ChatRoomsStoreBase, Store {
   }
 
   @override
-  void getMessagesStream() {
-    final _$actionInfo = _$_ChatRoomsStoreBaseActionController.startAction(
-        name: '_ChatRoomsStoreBase.getMessagesStream');
-    try {
-      return super.getMessagesStream();
-    } finally {
-      _$_ChatRoomsStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 messages: ${messages},
@@ -187,7 +211,8 @@ currentUserConversations: ${currentUserConversations},
 currentUserChatRooms: ${currentUserChatRooms},
 currentChatRoomId: ${currentChatRoomId},
 message: ${message},
-messageController: ${messageController}
+messageController: ${messageController},
+selectedContact: ${selectedContact}
     ''';
   }
 }
