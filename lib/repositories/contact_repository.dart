@@ -8,4 +8,9 @@ class ContactRepository {
   CollectionReference<Object?> getUsers() {
     return _userCollectionReference;
   }
+
+  Future<void> updateContact(
+      String contactID, Map<String, dynamic> lastMessage) {
+    return _userCollectionReference.doc(contactID).update(lastMessage);
+  }
 }
