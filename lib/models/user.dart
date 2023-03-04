@@ -11,12 +11,14 @@ class UserModel {
   String? photoUrl;
 
   UserModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        name = json['name'],
         photoUrl = json['photoUrl'],
         gender = json['gender'],
         state = json['state'];
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'photoUrl': photoUrl,
         'gender': gender,
