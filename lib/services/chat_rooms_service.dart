@@ -11,7 +11,8 @@ class ChatRoomsService {
   Stream<QuerySnapshot<Object?>> getchatRoomsStream(String currentUserId) {
     return _chatRoomsRepository
         .getChatRooms()
-        .where('usersID', arrayContains: currentUserId).snapshots();
+        .where('usersID', arrayContains: currentUserId)
+        .snapshots();
   }
 
   Future<QuerySnapshot<Object?>> checkChatRoomExists(
@@ -40,5 +41,9 @@ class ChatRoomsService {
 
   Future<void> sendMessage(String chatRoomID, MessageModel message) {
     return _chatRoomsRepository.getMessages(chatRoomID).add(message.toJson());
+  }
+
+  Future<void> reloadChatRooms(String chatRoomID, Map<String, dynamic> data) {
+    return _chatRoomsRepository.updateChatRooms(chatRoomID, data);
   }
 }

@@ -57,7 +57,7 @@ class _MessageFieldCustomState extends State<MessageField> {
                 ),
                 child: IconButton(
                   padding: const EdgeInsets.all(0),
-                  onPressed: () async {
+                  onPressed: () {
                     _chatRoomsStore.pressedSendMessage();
                   },
                   icon: const Icon(
