@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/auth/auth_service.dart';
@@ -14,9 +15,9 @@ class SplashPage extends StatelessWidget {
     final authService = GetIt.instance<AuthService>();
     final userStore = GetIt.instance<UserStore>();
 
-    Timer(const Duration(seconds: 1), () async {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       if (authService.currentUser != null) {
-        await userStore.getUser().then((_) {
+        userStore.getUser().then((_) {
           if (userStore.user != null) {
             Navigator.pushNamedAndRemoveUntil(
                 context, '/home', (route) => false);
