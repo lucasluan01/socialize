@@ -19,27 +19,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   @override
   void initState() {
     super.initState();
+    _chatRoomsStore.getMessagesStream();
   }
 
   @override
   Widget build(BuildContext context) {
-    // if(_chatRoomsStore.loadingMessages) {
-    //   return Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text(
-    //         'Chat',
-    //         style: TextStyle(color: Colors.white),
-    //       ),
-    //       foregroundColor: Colors.white,
-    //       backgroundColor: Theme.of(context).primaryColor,
-    //     ),
-    //     body: const Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   );
-    // }
-    _chatRoomsStore.getMessagesStream();
-
     return Observer(builder: (_) {
       return Scaffold(
         appBar: AppBar(
