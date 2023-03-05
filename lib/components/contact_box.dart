@@ -25,18 +25,23 @@ class _ContactBoxState extends State<ContactBox> {
         contentPadding: const EdgeInsets.all(0),
         leading: avatar(
             context: context, photo: widget.contact.photoUrl, radius: 20),
-        title: Text(widget.contact.name),
-        subtitle: Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.contact.lastMessage?['content'] ?? ''),
+            Text(widget.contact.name),
             widget.contact.lastMessage?['sendedAt'] != null
-                ? Text(DateFormat("HH:mm").format(
-                    DateTime.fromMicrosecondsSinceEpoch(widget.contact
-                        .lastMessage!['sendedAt']!.microsecondsSinceEpoch)))
+                ? Text(
+                    DateFormat("HH:mm").format(
+                      DateTime.fromMicrosecondsSinceEpoch(widget.contact
+                          .lastMessage!['sendedAt']!.microsecondsSinceEpoch),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ))
                 : Container(),
           ],
         ),
+        subtitle: Text(widget.contact.lastMessage?['content'] ?? ''),
         onTap: () async {
           _chatRoomsStore.setSelectedContact(widget.contact);
           await _chatRoomsStore.loadChatRoom(widget.contact.id).then((value) {
