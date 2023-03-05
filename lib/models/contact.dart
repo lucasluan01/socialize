@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ContactModel {
   ContactModel({
     required this.id,

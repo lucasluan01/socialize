@@ -49,18 +49,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           child: Column(
             children: [
               Expanded(
-                child: Observer(
-                  builder: (_) => ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8),
-                    reverse: true,
-                    separatorBuilder: (_, index) => const SizedBox(height: 8),
-                    itemCount: _chatRoomsStore.messages.length,
-                    itemBuilder: (_, index) {
-                      return MessageBox(
-                          message: _chatRoomsStore.messages[index]);
-                    },
-                  ),
+                child: ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                  reverse: true,
+                  separatorBuilder: (_, index) => const SizedBox(height: 8),
+                  itemCount: _chatRoomsStore.messages.length,
+                  itemBuilder: (_, index) {
+                    return MessageBox(message: _chatRoomsStore.messages[index]);
+                  },
                 ),
               ),
               const MessageField(),
