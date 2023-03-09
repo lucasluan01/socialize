@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:socialize/stores/chat_rooms_store.dart';
 
 class MessageField extends StatefulWidget {
@@ -30,7 +29,7 @@ class _MessageFieldCustomState extends State<MessageField> {
                     decoration: InputDecoration(
                       hintText: "Mensagem",
                       filled: true,
-                      fillColor: Colors.black12,
+                      fillColor: Colors.grey.withOpacity(0.2),
                       contentPadding: const EdgeInsets.all(12),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
