@@ -29,7 +29,7 @@ class _MessageFieldCustomState extends State<MessageField> {
                     decoration: InputDecoration(
                       hintText: "Mensagem",
                       filled: true,
-                      fillColor: Colors.black12,
+                      fillColor: Colors.grey.withOpacity(0.2),
                       contentPadding: const EdgeInsets.all(12),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
