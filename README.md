@@ -18,6 +18,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 ## 🧭 Executando o aplicativo
 
+É necessário criar um novo projeto no Firebase e configurá-lo corretamente. Para fazer isso, siga os passos abaixo:
+
+Acesse o console do Firebase: https://console.firebase.google.com/
+Clique em "Adicionar projeto" e siga as instruções para criar um novo projeto.
+Em seguida, siga as instruções para configurar as funcionalidades do Firebase, como Authentication, Firestore Database e Storage.
+
 Para executar o aplicativo, é necessário ter o Flutter e o Android Studio (ou outro IDE de sua escolha) instalados em sua máquina.
 
 ```bash
