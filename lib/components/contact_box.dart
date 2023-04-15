@@ -37,11 +37,16 @@ class _ContactBoxState extends State<ContactBox> {
                     ),
                     style: const TextStyle(
                       fontSize: 12,
-                    ))
+                    ),
+                  )
                 : Container(),
           ],
         ),
-        subtitle: Text(widget.contact.lastMessage?['content'] ?? ''),
+        subtitle: Text(
+          widget.contact.lastMessage?['content'] ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         onTap: () async {
           _chatRoomsStore.setSelectedContact(widget.contact);
           await _chatRoomsStore.loadChatRoom(widget.contact.id).then((value) {
