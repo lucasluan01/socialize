@@ -22,28 +22,47 @@ class _MessageFieldCustomState extends State<MessageField> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
-              child: TextFormField(
-                controller: _chatRoomsStore.messageController,
-                decoration: InputDecoration(
-                  hintText: "Mensagem",
-                  filled: true,
-                  fillColor: Colors.black12,
-                  contentPadding: const EdgeInsets.all(12),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 0, color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(10),
+              child: Stack(
+                children: [
+                  TextFormField(
+                    controller: _chatRoomsStore.messageController,
+                    decoration: InputDecoration(
+                      hintText: "Mensagem",
+                      filled: true,
+                      fillColor: Colors.grey.withOpacity(0.2),
+                      contentPadding: const EdgeInsets.all(12),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 0, color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 0, color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    onChanged: (value) => _chatRoomsStore.setMessage(value),
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 8,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 0, color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onChanged: (value) => _chatRoomsStore.setMessage(value),
-                keyboardType: TextInputType.multiline,
-                minLines: 1,
-                maxLines: 8,
+                  if (_chatRoomsStore.message.isEmpty) ...[
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () async {
+                          // TODO: Implementar envio de imagem
+                        },
+                        icon: const Icon(
+                          Icons.camera_alt,
+                        ),
+                      ),
+                    ),
+                  ]
+                ],
               ),
             ),
             if (_chatRoomsStore.message.isNotEmpty) ...[
@@ -57,7 +76,7 @@ class _MessageFieldCustomState extends State<MessageField> {
                 ),
                 child: IconButton(
                   padding: const EdgeInsets.all(0),
-                  onPressed: () async {
+                  onPressed: () {
                     _chatRoomsStore.pressedSendMessage();
                   },
                   icon: const Icon(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:socialize/components/dropdown_custom.dart';
-import 'package:socialize/components/new_contact_box.dart';
+import 'package:socialize/components/contact_box.dart';
 import 'package:socialize/stores/contact_store.dart';
 
 class NewContactsPage extends StatefulWidget {

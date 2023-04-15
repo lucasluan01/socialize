@@ -16,4 +16,8 @@ class ChatRoomsRepository {
       Map<String, dynamic> chatRoom) {
     return _chatRoomsCollectionReference.add(chatRoom);
   }
+
+  Future<void> updateChatRooms(String chatRoomID, Map<String, dynamic> data) {
+    return _chatRoomsCollectionReference.doc(chatRoomID).update(data);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:socialize/components/circle_avatar_custom.dart';
 import 'package:socialize/pages/chat_room/components/message_box.dart';
 import 'package:socialize/pages/chat_room/components/message_field.dart';
 import 'package:socialize/stores/chat_rooms_store.dart';
@@ -23,21 +24,32 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Chat',
-          style: TextStyle(color: Colors.white),
+    return Observer(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          titleSpacing: 0,
+          title: Row(
+            children: [
+              avatar(
+                context: context,
+                photo: _chatRoomsStore.selectedContact!.photoUrl,
+                radius: 20,
+              ),
+              const SizedBox(width: 16),
+              Text(
+                _chatRoomsStore.selectedContact!.name,
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
+          foregroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
-        foregroundColor: Colors.white,
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Observer(
-                builder: (_) => ListView.separated(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                   reverse: true,
@@ -48,11 +60,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   },
                 ),
               ),
-            ),
-            const MessageField(),
-          ],
+              const MessageField(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -34,26 +34,42 @@ abstract class _ChatRoomsStoreBase with Store {
   @observable
   TextEditingController messageController = TextEditingController();
 
+  @observable
+  ContactModel? selectedContact;
+
+  @action
+  void setSelectedContact(ContactModel value) => selectedContact = value;
+
   @action
   void setMessage(String value) => message = value.trim();
 
   @action
   void pressedSendMessage() {
+    Map<String, dynamic> newMessage = {
+      'content': message,
+      'senderID': _userStore.user!.id,
+      'sendedAt': Timestamp.now(),
+    };
+
     if (message.isNotEmpty) {
       _chatRoomsService.sendMessage(
-          currentChatRoomId,
-          MessageModel.fromJson({
-            'content': message,
-            'senderID': _userStore.user!.id,
-            'sendedAt': Timestamp.now(),
-          }));
+          currentChatRoomId, MessageModel.fromJson(newMessage));
       message = '';
       messageController.clear();
+      reloadChatRooms(newMessage);
     }
+  }
+
+  void reloadChatRooms(Map<String, dynamic> newMessage) {
+    _chatRoomsService.reloadChatRooms(currentChatRoomId, {
+      'lastMessage': newMessage,
+    });
   }
 
   @action
   Future<void> loadChatRoom(String contactID) async {
+    currentChatRoomId = '';
+
     await _chatRoomsService
         .checkChatRoomExists(_userStore.user!.id)
         .then((value) async {
@@ -92,6 +108,16 @@ abstract class _ChatRoomsStoreBase with Store {
               .map((e) =>
                   ContactModel.fromJson(e.data() as Map<String, dynamic>))
               .toList());
+
+      for (var contact in currentUserConversations) {
+        for (var chatRoom in currentUserChatRooms) {
+          if (chatRoom.usersID.contains(contact.id)) {
+            contact.lastMessage = chatRoom.lastMessage;
+          }
+        }
+      }
+      currentUserConversations.sort((a, b) =>
+          b.lastMessage?['sendedAt'].compareTo(a.lastMessage?['sendedAt']));
     }
   }
 
@@ -106,7 +132,7 @@ abstract class _ChatRoomsStoreBase with Store {
   }
 
   @action
-  void getMessagesStream() {
+  Future<void> getMessagesStream() async {
     _chatRoomsService.getMessagesStream(currentChatRoomId).listen((snapshot) {
       messages = snapshot.docs
           .map((e) => MessageModel.fromJson(e.data() as Map<String, dynamic>))
